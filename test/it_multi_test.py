@@ -19,10 +19,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sys
-import jubatus
 import time
 import unittest
 from subprocess import *
+
+import jubatus
+
 
 class jubatusTest(unittest.TestCase):
     def setUp(self):
@@ -38,7 +40,7 @@ class jubatusTest(unittest.TestCase):
  #       time.sleep(1)
 
     def isAlive(self):
-        if self.jubatus_pid.poll() == None:
+        if self.jubatus_pid.poll() is None:
             return True
         else:
             return False
@@ -48,15 +50,9 @@ class jubatusTest(unittest.TestCase):
 #        FIXME
 #        self.assertEqual(2 , cl.set_config(config_str))
 #        self.assertEqual(True, self.isAlive())
-    
-
-
-
-
 
     
 if __name__ == '__main__':
-
     zk_pid = Popen(['zkServer.sh', 'start'], stderr=PIPE)
     time.sleep(1)
     semimaster_pid = Popen(['semimaster', '--zookeeper=localhost:2181'])
@@ -64,41 +60,38 @@ if __name__ == '__main__':
     cl = jubatus.Classifier("localhost:9198", "TESTM", True)
 
     config_str = {
-            'converter': {
-                'string_filter_types': {},
-                'string_filter_rules': [],
-                'num_filter_types': {},
-                'num_filter_rules': [],
-                'string_types': {},
-                'string_rules': [
+        'converter': {
+            'string_filter_types': {},
+            'string_filter_rules': [],
+            'num_filter_types': {},
+            'num_filter_rules': [],
+            'string_types': {},
+            'string_rules': [
                 {'key':'*','type':'space','sample_weight':'bin','global_weight':'bin'}
-                ],
-                'num_types': {},
-                'num_rules': []
-                },
-            'method': "PA",
-            }
+            ],
+            'num_types': {},
+            'num_rules': []
+        },
+        'method': "PA",
+    }
 
     config_null = {
-            'converter': {
-                'string_filter_types': {},
-                'string_filter_rules': [],
-                'num_filter_types': {},
-                'num_filter_rules': [],
-                'string_types': {},
-                'string_rules': [],
-                'num_types': {},
-                'num_rules': []
-                },
-            'method': "",
-            }
+        'converter': {
+            'string_filter_types': {},
+            'string_filter_rules': [],
+            'num_filter_types': {},
+            'num_filter_rules': [],
+            'string_types': {},
+            'string_rules': [],
+            'num_types': {},
+            'num_rules': []
+        },
+        'method': "",
+    }
 
-
-    tdata_str_1 = [('001', ([["a", "abc"]], ) , )]
+    tdata_str_1 = [('001', ([["a", "abc"]], ), )]
     cdata_str_1 = [        ([["a", "abc"]], )]
 
-
-    
     test_suite = unittest.TestLoader().loadTestsFromTestCase(jubatusTest)
     unittest.TextTestRunner(verbosity=2).run(test_suite)
 
