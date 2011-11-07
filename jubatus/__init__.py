@@ -177,7 +177,7 @@ class Classifier(Accessor):
     def get_status(self):
         f = MPClientFunc(self.choose_one(), 'get_status')
         try:
-            (success, retval, error) = f()
+            (success, retval, error) = f(self.name)
             if not success:
                   raise RuntimeError(error)
         except RuntimeError, e:
