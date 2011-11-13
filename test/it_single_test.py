@@ -96,6 +96,15 @@ class jubatusTest(unittest.TestCase):
             'method': "PA",
         }
 
+        self.config_str_with_default = {
+            'converter': {
+                'string_rules': [
+                    {'key':'*','type':'space','sample_weight':'bin','global_weight':'bin'}
+                ]
+            },
+            'method': "PA",
+        }
+
         self.config_null = {
             'converter': {
                 'string_filter_types': {},
@@ -141,6 +150,10 @@ class jubatusTest(unittest.TestCase):
         self.assertEqual(0, self.cl.set_config(self.config_str))
         self.assertTrue(self.isAlive())
 
+    def test_000_setconfig4(self):
+        self.assertEqual(0, self.cl.set_config(self.config_str_with_default))
+        self.assertTrue(self.isAlive())
+
 
     def test_001_getconfig1(self):
         self.cl.set_config(self.config)
@@ -154,6 +167,11 @@ class jubatusTest(unittest.TestCase):
 
     def test_001_getconfig3(self):
         self.cl.set_config(self.config_str)
+        self.assertEqual(self.config_str, self.cl.get_config())
+        self.assertTrue(self.isAlive())
+
+    def test_001_getconfig4(self):
+        self.cl.set_config(self.config_str_with_default)
         self.assertEqual(self.config_str, self.cl.get_config())
         self.assertTrue(self.isAlive())
 
