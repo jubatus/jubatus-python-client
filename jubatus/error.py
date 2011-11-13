@@ -15,6 +15,18 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-__all__ = ["classifier"]
+class Error(Exception):
+    """Base class for exceptions in jubatus-python module."""
+    pass
 
-from jubatus.classifier import Classifier
+class MethodNotFoundError(Error):
+    """The method of RPC not found."""
+    pass
+
+class TypeMismatchError(Error):
+    """The type of RPC-request is mismatched."""
+    pass
+
+class BadRPCError(Error):
+    """Invalid RPC was executed."""
+    pass
