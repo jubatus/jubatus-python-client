@@ -131,119 +131,119 @@ class jubatusTest(unittest.TestCase):
 
     def test_000_setconfig1(self):
         self.assertEqual(0, self.cl.set_config(self.config))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
     
     def test_000_setconfig2(self):
         self.assertEqual(0, self.cl.set_config(self.config_num))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_000_setconfig3(self):
         self.assertEqual(0, self.cl.set_config(self.config_str))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
 
     def test_001_getconfig1(self):
         self.cl.set_config(self.config)
         self.assertEqual(self.config, self.cl.get_config())
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_001_getconfig2(self):
         self.cl.set_config(self.config_num)
         self.assertEqual(self.config_num, self.cl.get_config())
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_001_getconfig3(self):
         self.cl.set_config(self.config_str)
         self.assertEqual(self.config_str, self.cl.get_config())
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
 
     def test_002_train20(self):
         self.cl.set_config(self.config_num)
         self.assertEqual(True, self.cl.train(self.tdata_num_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
         
     def test_002_train21(self):
         self.cl.set_config(self.config_num)
         self.cl.train(self.tdata_num_1)
         self.assertEqual(True, self.cl.train(self.tdata_num_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_002_train30(self):
         self.cl.set_config(self.config_str)
         self.assertEqual(True, self.cl.train(self.tdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
  
     def test_002_train31(self):
         self.cl.set_config(self.config_str)
         self.cl.train(self.tdata_str_1)
         self.assertEqual(True, self.cl.train(self.tdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_003_classify2(self):
         self.cl.set_config(self.config_num)
         self.cl.train(self.tdata_num_1)
         self.assertEqual([[('001', 1.0)]], self.cl.classify(self.cdata_num_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_003_classify3(self):
         self.cl.set_config(self.config_str)
         self.assertEqual(True, self.cl.train(self.tdata_str_1))
         self.assertEqual([[('001', 1.0)]], self.cl.classify(self.cdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_004_get_status2(self):
         self.cl.set_config(self.config_num)
         self.cl.train(self.tdata_num_1)
         self.assertEqual(1, len(self.cl.get_status()))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_004_get_status3(self):
         self.cl.set_config(self.config_str)
         self.cl.train(self.tdata_str_1)
         self.assertEqual(1, len(self.cl.get_status()))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_004_get_status4(self):
         self.cl.set_config(self.config_str)
         self.assertEqual(1, len(self.cl.get_status()))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
             
     def test_006_save1(self):
         self.cl.set_config(self.config_num)
         self.cl.train(self.tdata_num_1)
         self.assertEqual(1, self.cl.save("num"))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_006_save2(self):
         self.cl.set_config(self.config_str)
         self.cl.train(self.tdata_str_1)
         self.assertEqual(1, self.cl.save("str"))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_007_load1(self):
         self.assertEqual(1, self.cl.load("num"))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_007_load2(self):
         self.assertEqual(1, self.cl.load("str"))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_007_load3(self):
         self.cl.load("str")
         self.cl.set_config(self.config_str)
-        self.assertEqual([[('001', 1.0)]], self.cl.classify(self.cdata_str_1))        
-        self.assertTrue(self.isAlive())        
+        self.assertEqual([[('001', 1.0)]], self.cl.classify(self.cdata_str_1))
+        self.assertTrue(self.isAlive())
 
     def test_007_load4(self):
         self.cl.load("str")
         self.cl.set_config(self.config_str)
         self.assertEqual(True, self.cl.train(self.tdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_007_load5(self):
         self.assertTrue(self.cl.load("null").find("cannot open") != -1) # not exist
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_007_load6(self):
         self.cl.set_config(self.config_str)
@@ -252,7 +252,7 @@ class jubatusTest(unittest.TestCase):
         self.cl.load("str")
         self.cl.set_config(self.config_str)
         self.assertEqual([[('001', 1.0)]], self.cl.classify(self.cdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_008_load7(self):
         self.cl.set_config(self.config_str)
@@ -261,7 +261,7 @@ class jubatusTest(unittest.TestCase):
         self.cl.load("str_t7")
         self.cl.set_config(self.config_str)
         self.cl.save("str_t72")
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_100_senario0(self):
         pass
@@ -269,33 +269,33 @@ class jubatusTest(unittest.TestCase):
 
     def test_901_classifiy_before_train(self):
         self.cl.set_config(self.config_str)
-        self.assertEqual([[]], self.cl.classify(self.cdata_str_1))         
-        self.assertTrue(self.isAlive())        
+        self.assertEqual([[]], self.cl.classify(self.cdata_str_1)) 
+        self.assertTrue(self.isAlive())
 
 
     def test_902_not_config1(self):
         self.assertEqual(self.config_null, self.cl.get_config())
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_902_not_config2(self):
         self.assertEqual("config_not_set", self.cl.train(self.tdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_902_not_config3(self):
         self.assertEqual("config_not_set", self.cl.classify(self.cdata_str_1))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_902_not_config4(self):
         self.assertEqual(1, len(self.cl.get_status()))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_902_not_config6(self):
         self.assertEqual(1, self.cl.save("TEST"))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     def test_902_not_config7(self):
         self.assertEqual(1, self.cl.load("TEST"))
-        self.assertTrue(self.isAlive())        
+        self.assertTrue(self.isAlive())
 
     
 if __name__ == '__main__':
