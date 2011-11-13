@@ -174,7 +174,7 @@ class jubatusTest(unittest.TestCase):
         self.assertEqual(True, self.cl.train(self.tdata_str_1))
         self.assertTrue(self.isAlive())        
  
-    def test_002_train30(self):
+    def test_002_train31(self):
         self.cl.set_config(self.config_str)
         self.cl.train(self.tdata_str_1)
         self.assertEqual(True, self.cl.train(self.tdata_str_1))
