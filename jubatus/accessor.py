@@ -50,29 +50,29 @@ class MPClientFunc:
         i = random.randint(0, MAX_CALL_ID)
 #        print "sending: ", [0, i, self.method, argv], "to", (self.host, self.port)
         s.sendall(msgpack.packb([0, i, self.method, argv]))
-        buf = s.recv(4096)
-        s.close()
-#        print len(buf), buf, ":\n"
 
-        self.unpacker.feed(buf)
-        for o in self.unpacker: # o => [1, cid, None, RetVal] or [1, cid, ErrCode, None]
-            if len(o) != 4:
-                raise BadRPCError(o)
-            elif o[0] != 1:
-                raise BadRPCError(o)
-            elif o[1] != i:
-                raise BadRPCError(o)
-            elif o[2] is not None:
-                if o[2] == 1:
-                    raise MethodNotFoundError
-                elif o[2] == 2:
-                    print "recvd: ", o 
-                    raise TypeMismatchError
+        while True:
+            buf = s.recv(4096)
+            self.unpacker.feed(buf)
+                
+            for o in self.unpacker:
+                # o => [1, cid, None, RetVal] or [1, cid, ErrCode, None]
+                s.close()
+                if len(o) != 4:
+                    raise BadRPCError(o)
+                elif o[0] != 1:
+                    raise BadRPCError(o)
+                elif o[1] != i:
+                    raise BadRPCError(o)
+                elif o[2] is not None:
+                    if o[2] == 1:
+                        raise MethodNotFoundError
+                    elif o[2] == 2:
+                        raise TypeMismatchError
+                    else:
+                        raise o[2]
                 else:
-                    raise o[2]
-            else:
-                return o[3]
-
+                    return o[3]
 
 class Accessor:
     """Base class for jubatus API."""
