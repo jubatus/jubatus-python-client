@@ -87,20 +87,10 @@ class Accessor:
 
     def save(self, id_):
         f = MPClientFunc(self.choose_one(), 'save')
-        try:
-            (success, retval, error) = f(self.name, "classifier", id_)
-            if not success:
-                raise RuntimeError(error)
-        except RuntimeError, e:
-            return error
-        return success
+        retval = f(self.name, "classifier", id_)
+        return retval
 
     def load(self, id_): 
         f = MPClientFunc(self.choose_one(), 'load')
-        try:
-            (success, retval, error) = f(self.name, "classifier", id_)
-            if not success:
-                raise RuntimeError(error)
-        except RuntimeError, e:
-            return error
-        return success
+        retval = f(self.name, "classifier", id_)
+        return retval

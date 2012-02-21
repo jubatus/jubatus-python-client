@@ -24,19 +24,12 @@ class Classifier(Accessor):
 
     def set_config(self, config):
         f = MPClientFunc(self.choose_one(), 'set_config')
-        try:
-            (success, retval, error) = f(self.name, Classifier.Config(config).pack())
-            if not success:
-                raise RuntimeError(error)
-        except RuntimeError, e:
-            return error
+        retval = f(self.name, Classifier.Config(config).pack())
         return retval
 
     def get_config(self):
         f = MPClientFunc(self.choose_one(), 'get_config')
-        (success, retval, error) = f(self.name)
-        if not success:
-            raise RuntimeError(error)
+        retval = f(self.name)
 
         c = {'converter': {}}
         c['method'] = retval[0]
@@ -52,34 +45,18 @@ class Classifier(Accessor):
 
     def train(self, label2data):
         f = MPClientFunc(self.choose_one(), 'train')
-        try:
-            (success, retval, error) = f(self.name, label2data)
-            if not success:
-                raise RuntimeError(error)
-        except RuntimeError, e:
-               return error
+        retval = f(self.name, label2data)
         return retval
 
     def classify(self, data):
         f = MPClientFunc(self.choose_one(), 'classify')
-        try:
-            (success, retval, error) = f(self.name, data)
-            if not success:
-                raise RuntimeError(error)
-        except RuntimeError, e:
-               return error
+        retval = f(self.name, data)
         return map(lambda t: list(t), retval)
 
     def get_status(self):
         f = MPClientFunc(self.choose_one(), 'get_status')
-        try:
-            (success, retval, error) = f(self.name)
-            if not success:
-                  raise RuntimeError(error)
-        except RuntimeError, e:
-               return error
+        retval = f(self.name)
         return retval
-
 
     class Config:
         """Spec is derived from server/rpc.hpp: struct classifier_config_data"""

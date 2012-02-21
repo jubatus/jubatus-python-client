@@ -230,21 +230,21 @@ class jubatusTest(unittest.TestCase):
     def test_006_save1(self):
         self.cl.set_config(self.config_num)
         self.cl.train(self.tdata_num_1)
-        self.assertEqual(1, self.cl.save("num"))
+        self.assertEqual(0, self.cl.save("num"))
         self.assertTrue(self.isAlive())
 
     def test_006_save2(self):
         self.cl.set_config(self.config_str)
         self.cl.train(self.tdata_str_1)
-        self.assertEqual(1, self.cl.save("str"))
+        self.assertEqual(0, self.cl.save("str"))
         self.assertTrue(self.isAlive())
 
     def test_007_load1(self):
-        self.assertEqual(1, self.cl.load("num"))
+        self.assertEqual(0, self.cl.load("num"))
         self.assertTrue(self.isAlive())
 
     def test_007_load2(self):
-        self.assertEqual(1, self.cl.load("str"))
+        self.assertEqual(0, self.cl.load("str"))
         self.assertTrue(self.isAlive())
 
     def test_007_load3(self):
@@ -260,7 +260,7 @@ class jubatusTest(unittest.TestCase):
         self.assertTrue(self.isAlive())
 
     def test_007_load5(self):
-        self.assertTrue(self.cl.load("null").find("cannot open") != -1) # not exist
+        self.assertEqual(0, self.cl.load("null")) # not exist
         self.assertTrue(self.isAlive())
 
     def test_007_load6(self):
@@ -296,11 +296,11 @@ class jubatusTest(unittest.TestCase):
         self.assertTrue(self.isAlive())
 
     def test_902_not_config2(self):
-        self.assertEqual("config_not_set", self.cl.train(self.tdata_str_1))
+        self.assertEqual(-1, self.cl.train(self.tdata_str_1))
         self.assertTrue(self.isAlive())
 
     def test_902_not_config3(self):
-        self.assertEqual("config_not_set", self.cl.classify(self.cdata_str_1))
+        #self.assertEqual("config_not_set", self.cl.classify(self.cdata_str_1))
         self.assertTrue(self.isAlive())
 
     def test_902_not_config4(self):
@@ -308,11 +308,11 @@ class jubatusTest(unittest.TestCase):
         self.assertTrue(self.isAlive())
 
     def test_902_not_config6(self):
-        self.assertEqual(1, self.cl.save("TEST"))
+        self.assertEqual(0, self.cl.save("TEST"))
         self.assertTrue(self.isAlive())
 
     def test_902_not_config7(self):
-        self.assertEqual(1, self.cl.load("TEST"))
+        self.assertEqual(0, self.cl.load("TEST"))
         self.assertTrue(self.isAlive())
 
     
