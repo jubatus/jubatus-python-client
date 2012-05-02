@@ -17,4 +17,4 @@
 
 __all__ = ["classifier"]
 
-from jubatus.classifier import Classifier
+# from jubatus.classifier import Classifier
