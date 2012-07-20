@@ -16,7 +16,7 @@ def read(name):
     return open(os.path.join(os.path.dirname(__file__), name)).read()
 
 setup(name='jubatus',
-      version="0.2.2",
+      version="0.3.1",
       description="client for jubatus: highly distributed online machine learning system",
       long_description=read('README.rst'),
       author='PFI & NTT',
@@ -26,7 +26,7 @@ setup(name='jubatus',
       platforms='Linux',
       packages=['jubatus'],
       install_requires=[
-          'msgpack-python>=0.1.9',
+          'msgpack-rpc-python>=0.3.0'
       ],
 
       entry_points="",
