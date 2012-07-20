@@ -17,4 +17,8 @@
 
 __all__ = ["classifier", "regression", "recommender", "stat", "graph"]
 
-# from jubatus.classifier import Classifier
+from jubatus.classifier.client import Classifier
+from jubatus.regression.client import Regression
+from jubatus.recommender.client import Recommender
+from jubatus.stat.client import Stat
+from jubatus.graph.client import Graph

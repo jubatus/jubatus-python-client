@@ -1,5 +1,5 @@
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -24,7 +24,11 @@ setup(name='jubatus',
       url='http://jubat.us',
       license='LGPL',
       platforms='Linux',
-      packages=['jubatus'],
+      packages=find_packages(exclude=['test']),
+#      packages=['jubatus',
+#                'jubatus/classifier', 'jubatus/recommender', 'jubatus/stat', 'jubatus/regression',
+#                'jubatus/graph',
+#                ],
       install_requires=[
           'msgpack-rpc-python>=0.3.0'
       ],
