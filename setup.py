@@ -16,19 +16,15 @@ def read(name):
     return open(os.path.join(os.path.dirname(__file__), name)).read()
 
 setup(name='jubatus',
-      version="0.3.1",
+      version=read('VERSION'),
       description="client for jubatus: highly distributed online machine learning system",
       long_description=read('README.rst'),
       author='PFI & NTT',
       author_email='',
       url='http://jubat.us',
-      license='LGPL',
+      license='MIT',
       platforms='Linux',
       packages=find_packages(exclude=['test']),
-#      packages=['jubatus',
-#                'jubatus/classifier', 'jubatus/recommender', 'jubatus/stat', 'jubatus/regression',
-#                'jubatus/graph',
-#                ],
       install_requires=[
           'msgpack-rpc-python>=0.3.0'
       ],
@@ -40,7 +36,7 @@ setup(name='jubatus',
           'Environment :: Other Environment',
           'Intended Audience :: Developers',
           'Intended Audience :: Science/Research',
-          'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+          'License :: OSI Approved :: MIT License',
           'Operating System :: POSIX :: Linux',
           'Programming Language :: Python',
           'Topic :: Scientific/Engineering :: Information Analysis'
