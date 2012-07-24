@@ -1,4 +1,5 @@
 include README.rst
 include LICENSE
+include VERSION
 include jubatus/**/*.py
 include jubatus/*.py
