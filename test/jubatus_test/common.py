@@ -36,12 +36,12 @@ class CommonUtils:
     sleep_time = 1000 # usec
     # 1000 * \sum {i=0..9} 2^i = 1024000 micro sec = 1024 ms
     for i in range(10):
-	    # For Python clients, we need to generate instance for each iteration.
+        # For Python clients, we need to generate instance for each iteration.
         cli = msgpackrpc.Client(msgpackrpc.Address("localhost", port))
         time.sleep(sleep_time/1000000.0) # from usec to sec
         try:
-        	cli.call("dummy")
-        	raise Exception("dummy rpc succeeded")
+            cli.call("dummy")
+            raise Exception("dummy rpc succeeded")
         except RPCError, e:
             if e.args[0] == 1: # "no such method"
                 return         # ... means server is fully up
