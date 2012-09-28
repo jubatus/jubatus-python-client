@@ -1,6 +1,7 @@
 import os
 import time
 import signal
+from threading import Timer
 
 import msgpackrpc
 from msgpackrpc.error import *
@@ -25,7 +26,10 @@ class CommonUtils:
   def stop_server(pid):
     if os.kill(pid, signal.SIGTERM) != None:
       print 'kill error'
+    t = Timer(3.0, os.kill, [pid, signal.SIGKILL])
+    t.start()
     os.waitpid(pid, 0)
+    t.cancel()
 
   @staticmethod
   def wait_server(port):
