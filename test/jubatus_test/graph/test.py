@@ -28,7 +28,7 @@ class GraphTest(unittest.TestCase):
 
   def test_create_node(self):
     nid = self.cli.create_node("name")
-    self.assertEqual(nid, "3")
+    self.assertIsInstance(nid, str)
 
   def test_remove_node(self):
     nid = self.cli.create_node("name")
