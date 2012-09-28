@@ -4,6 +4,8 @@ import unittest
 from jubatus.stat.client import stat
 from jubatus.stat.types  import *
 
+from jubatus_test.common import CommonUtils
+
 from math import sqrt
 
 host = "localhost"
@@ -12,10 +14,14 @@ timeout = 10
 
 class StatTest(unittest.TestCase):
   def setUp(self):
+    self.srv = CommonUtils.start_server("jubastat", port)
     self.cli = stat(host, port)
     self.window_size = 10
     cd = config_data(self.window_size)
     self.cli.set_config("name", cd)
+
+  def tearDown(self):
+    CommonUtils.stop_server(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")

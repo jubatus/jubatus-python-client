@@ -4,6 +4,8 @@ import unittest
 from jubatus.recommender.client import recommender
 from jubatus.recommender.types  import *
 
+from jubatus_test.common import CommonUtils
+
 from math import sqrt
 
 host = "localhost"
@@ -12,11 +14,15 @@ timeout = 10
 
 class RecommenderTest(unittest.TestCase):
   def setUp(self):
+    self.srv = CommonUtils.start_server("jubarecommender", port)
     self.cli = recommender(host, port)
     method = "inverted_index"
     self.converter = "{\n\"string_filter_types\":{}, \n\"string_filter_rules\":[], \n\"num_filter_types\":{}, \n\"num_filter_rules\":[], \n\"string_types\":{}, \n\"string_rules\":\n[{\"key\":\"*\", \"type\":\"str\", \n\"sample_weight\":\"bin\", \"global_weight\":\"bin\"}\n], \n\"num_types\":{}, \n\"num_rules\":[\n{\"key\":\"*\", \"type\":\"num\"}\n]\n}"
     cd = config_data(method, self.converter)
     self.cli.set_config("name", cd)
+
+  def tearDown(self):
+    CommonUtils.stop_server(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")
