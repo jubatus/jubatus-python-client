@@ -55,5 +55,5 @@ class ClassifierTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  test_suite = unittest.TestLoader().loadTestsFromTestCase(RecommenderTest)
+  test_suite = unittest.TestLoader().loadTestsFromTestCase(ClassifierTest)
   unittest.TextTestRunner().run(test_suite)
