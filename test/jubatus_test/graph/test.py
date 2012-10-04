@@ -4,19 +4,19 @@ import unittest
 from jubatus.graph.client import graph
 from jubatus.graph.types  import *
 
-from jubatus_test.common import CommonUtils
+from jubatus_test.test_util import TestUtil
 
-host = "localhost"
+host = "127.0.0.1"
 port = 21005
 timeout = 10
 
 class GraphTest(unittest.TestCase):
   def setUp(self):
-    self.srv = CommonUtils.start_server("jubagraph", port)
+    self.srv = TestUtil.fork_process("graph", port)
     self.cli = graph(host, port)
 
   def tearDown(self):
-    CommonUtils.stop_server(self.srv)
+    TestUtil.kill_process(self.srv)
 
   def test_node_info(self):
     edge_query = [["a", "b"], ["c", "d"], ["e", "f"]]

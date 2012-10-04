@@ -4,15 +4,15 @@ import unittest
 from jubatus.regression.client import regression
 from jubatus.regression.types  import *
 
-from jubatus_test.common import CommonUtils
+from jubatus_test.test_util import TestUtil
 
-host = "localhost"
+host = "127.0.0.1"
 port = 21002
 timeout = 10
 
 class RegressionTest(unittest.TestCase):
   def setUp(self):
-    self.srv = CommonUtils.start_server("jubaregression", port)
+    self.srv = TestUtil.fork_process("regression", port)
     self.cli = regression(host, port)
     method = "PA"
     self.converter = "{\n\"string_filter_types\":{}, \n\"string_filter_rules\":[], \n\"num_filter_types\":{}, \n\"num_filter_rules\":[], \n\"string_types\":{}, \n\"string_rules\":\n[{\"key\":\"*\", \"type\":\"space\", \n\"sample_weight\":\"bin\", \"global_weight\":\"bin\"}\n], \n\"num_types\":{}, \n\"num_rules\":[\n{\"key\":\"*\", \"type\":\"num\"}\n]\n}"
@@ -20,7 +20,7 @@ class RegressionTest(unittest.TestCase):
     self.cli.set_config("name", cd)
 
   def tearDown(self):
-    CommonUtils.stop_server(self.srv)
+    TestUtil.kill_process(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")

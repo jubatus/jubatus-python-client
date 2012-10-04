@@ -4,17 +4,17 @@ import unittest
 from jubatus.recommender.client import recommender
 from jubatus.recommender.types  import *
 
-from jubatus_test.common import CommonUtils
+from jubatus_test.test_util import TestUtil
 
 from math import sqrt
 
-host = "localhost"
+host = "127.0.0.1"
 port = 21003
 timeout = 10
 
 class RecommenderTest(unittest.TestCase):
   def setUp(self):
-    self.srv = CommonUtils.start_server("jubarecommender", port)
+    self.srv = TestUtil.fork_process("recommender", port)
     self.cli = recommender(host, port)
     method = "inverted_index"
     self.converter = "{\n\"string_filter_types\":{}, \n\"string_filter_rules\":[], \n\"num_filter_types\":{}, \n\"num_filter_rules\":[], \n\"string_types\":{}, \n\"string_rules\":\n[{\"key\":\"*\", \"type\":\"str\", \n\"sample_weight\":\"bin\", \"global_weight\":\"bin\"}\n], \n\"num_types\":{}, \n\"num_rules\":[\n{\"key\":\"*\", \"type\":\"num\"}\n]\n}"
@@ -22,7 +22,7 @@ class RecommenderTest(unittest.TestCase):
     self.cli.set_config("name", cd)
 
   def tearDown(self):
-    CommonUtils.stop_server(self.srv)
+    TestUtil.kill_process(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")
@@ -80,10 +80,10 @@ class RecommenderTest(unittest.TestCase):
     self.cli.clear("name")
 
   def test_save(self):
-    self.assertEqual(self.cli.save("name", "classifier.save_test.model"), True)
+    self.assertEqual(self.cli.save("name", "recommender.save_test.model"), True)
 
   def test_load(self):
-    model_name = "classifier.load_test.model"
+    model_name = "recommender.load_test.model"
     self.cli.save("name", model_name)
     self.assertEqual(self.cli.load("name", model_name), True)
 
