@@ -16,7 +16,7 @@ def read(name):
     return open(os.path.join(os.path.dirname(__file__), name)).read()
 
 setup(name='jubatus',
-      version=read('VERSION'),
+      version=read('VERSION').rstrip(),
       description="client for jubatus: highly distributed online machine learning system",
       long_description=read('README.rst'),
       author='PFI & NTT',
