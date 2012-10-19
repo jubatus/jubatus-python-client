@@ -17,12 +17,13 @@ def read(name):
 
 setup(name='jubatus',
       version=read('VERSION').rstrip(),
-      description="client for jubatus: highly distributed online machine learning system",
+      description='Jubatus is a distributed processing framework and streaming machine learning library. This is Jubatus client for Python.',
       long_description=read('README.rst'),
       author='PFI & NTT',
-      author_email='',
+      author_email='jubatus@googlegroups.com',
       url='http://jubat.us',
-      license='MIT',
+      download_url='http://pypi.python.org/pypi/jubatus/',
+      license='MIT License',
       platforms='Linux',
       packages=find_packages(exclude=['test']),
       install_requires=[
