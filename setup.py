@@ -17,7 +17,7 @@ def read(name):
 
 setup(name='jubatus',
       version=read('VERSION').rstrip(),
-      description='Jubatus is a distributed processing framework and streaming machine learning library. This is Jubatus client for Python.',
+      description='Jubatus is a distributed processing framework and streaming machine learning library. This is the Jubatus client in Python.',
       long_description=read('README.rst'),
       author='PFI & NTT',
       author_email='jubatus@googlegroups.com',
