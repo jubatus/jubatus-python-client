@@ -25,12 +25,13 @@ class TestUtil:
     raise Exception("cannot connect")
 
   @staticmethod
-  def fork_process(name, port = 9199):
+  def fork_process(name, port = 9199, config = ""):
     cmd = "juba" + name
+
     try:
       child = os.fork()
       if child == 0:
-        os.execvp(cmd, [cmd, "-p", str(port), "-c", "100", "-d", "."])
+        os.execvp(cmd, [cmd, "--rpc-port", str(port), "--config", config, "--thread", "100", "--tmpdir", "."])
       elif child < 0:
         print 'fork error'
         sys.exit(1)
