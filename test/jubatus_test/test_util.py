@@ -50,3 +50,8 @@ class TestUtil:
     os.waitpid(child, 0)
     t.cancel()
 
+  @staticmethod
+  def write_file(path, data):
+    f = open(path, 'w')
+    f.write(data)
+    f.close()
