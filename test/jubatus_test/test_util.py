@@ -31,7 +31,7 @@ class TestUtil:
     try:
       child = os.fork()
       if child == 0:
-        os.execvp(cmd, [cmd, "--rpc-port", str(port), "--config", config, "--thread", "100", "--tmpdir", "."])
+        os.execvp(cmd, [cmd, "--rpc-port", str(port), "--configpath", config, "--thread", "100", "--tmpdir", "."])
       elif child < 0:
         print 'fork error'
         sys.exit(1)
