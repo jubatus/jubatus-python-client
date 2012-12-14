@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import unittest
+
+import json
+from math import sqrt
+
 from jubatus.recommender.client import recommender
 from jubatus.recommender.types  import *
-
 from jubatus_test.test_util import TestUtil
-
-from math import sqrt
 
 host = "127.0.0.1"
 port = 21003
@@ -14,20 +15,30 @@ timeout = 10
 
 class RecommenderTest(unittest.TestCase):
   def setUp(self):
-    self.srv = TestUtil.fork_process("recommender", port)
+    self.config = {
+        "method": "inverted_index",
+        "converter": {
+            "string_filter_types": {},
+            "string_filter_rules": [],
+            "num_filter_types": {},
+            "num_filter_rules": [],
+            "string_types": {},
+            "string_rules": [{"key": "*", "type": "str",  "sample_weight": "bin", "global_weight": "bin"}],
+            "num_types": {},
+            "num_rules": [{"key": "*", "type": "num"}]
+        }
+    }
+
+    TestUtil.write_file('config_recommender.json', json.dumps(self.config))
+    self.srv = TestUtil.fork_process('recommender', port, 'config_recommender.json')
     self.cli = recommender(host, port)
-    method = "inverted_index"
-    self.converter = "{\n\"string_filter_types\":{}, \n\"string_filter_rules\":[], \n\"num_filter_types\":{}, \n\"num_filter_rules\":[], \n\"string_types\":{}, \n\"string_rules\":\n[{\"key\":\"*\", \"type\":\"str\", \n\"sample_weight\":\"bin\", \"global_weight\":\"bin\"}\n], \n\"num_types\":{}, \n\"num_rules\":[\n{\"key\":\"*\", \"type\":\"num\"}\n]\n}"
-    cd = config_data(method, self.converter)
-    self.cli.set_config("name", cd)
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")
-    self.assertEqual(config.method, "inverted_index")
-    self.assertEqual(config.converter, self.converter)
+    self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_complete_row(self):
     self.cli.clear_row("name", "complete_row")

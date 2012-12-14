@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import unittest
+import json
+
 from jubatus.classifier.client import classifier
 from jubatus.classifier.types  import *
-
 from jubatus_test.test_util import TestUtil
 
 host = "127.0.0.1"
@@ -12,20 +13,30 @@ timeout = 10
 
 class ClassifierTest(unittest.TestCase):
   def setUp(self):
-    self.srv = TestUtil.fork_process("classifier", port)
+    self.config = {
+        "method": "AROW",
+        "converter": {
+            "string_filter_types": {},
+            "string_filter_rules": [],
+            "num_filter_types": {},
+            "num_filter_rules": [],
+            "string_types": {},
+            "string_rules": [{"key": "*", "type": "str",  "sample_weight": "bin", "global_weight": "bin"}],
+            "num_types": {},
+            "num_rules": [{"key": "*", "type": "num"}]
+        }
+    }
+
+    TestUtil.write_file('config_classifier.json', json.dumps(self.config))
+    self.srv = TestUtil.fork_process('classifier', port, 'config_classifier.json')
     self.cli = classifier(host, port)
-    method = "AROW"
-    self.converter = "{\n\"string_filter_types\":{}, \n\"string_filter_rules\":[], \n\"num_filter_types\":{}, \n\"num_filter_rules\":[], \n\"string_types\":{}, \n\"string_rules\":\n[{\"key\":\"*\", \"type\":\"space\", \n\"sample_weight\":\"bin\", \"global_weight\":\"bin\"}\n], \n\"num_types\":{}, \n\"num_rules\":[\n{\"key\":\"*\", \"type\":\"num\"}\n]\n}"
-    cd = config_data(method, self.converter)
-    self.cli.set_config("name", cd)
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")
-    self.assertEqual(config.method, "AROW")
-    self.assertEqual(config.config, self.converter)
+    self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_train(self):
     string_values = [["key1", "val1"], ["key2", "val2"]]

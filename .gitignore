@@ -1,4 +1,7 @@
 *.egg-info
 *.egg
 *.pyc
+.coverage
 *.js
+*.xml
+*.json
