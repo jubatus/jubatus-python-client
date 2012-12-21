@@ -32,12 +32,12 @@ class GraphTest(unittest.TestCase):
 
   def test_remove_node(self):
     nid = self.cli.create_node("name")
-    self.assertEqual(self.cli.remove_node("name", nid), 0)
+    self.assertEqual(self.cli.remove_node("name", nid), True)
 
   def test_update_node(self):
     nid = self.cli.create_node("name")
     prop = {"key1":"val1", "key2":"val2"}
-    self.assertEqual(self.cli.update_node("name", nid, prop), 0)
+    self.assertEqual(self.cli.update_node("name", nid, prop), True)
 
   def test_create_edge(self):
     src = self.cli.create_node("name")
