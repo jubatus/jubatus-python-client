@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import unittest
+import json
+
 from jubatus.graph.client import graph
 from jubatus.graph.types  import *
 
@@ -12,7 +14,16 @@ timeout = 10
 
 class GraphTest(unittest.TestCase):
   def setUp(self):
-    self.srv = TestUtil.fork_process("graph", port)
+    self.config = {
+        "method": "graph_wo_index",
+        "parameter": {
+            "damping_factor": 0.9,
+            "landmark_num": 5
+        }
+    }
+
+    TestUtil.write_file('config_graph.json', json.dumps(self.config))
+    self.srv = TestUtil.fork_process('graph', port, 'config_graph.json')
     self.cli = graph(host, port)
 
   def tearDown(self):
@@ -24,7 +35,7 @@ class GraphTest(unittest.TestCase):
     p = preset_query(edge_query, node_query)
     in_edges = [0, 0]
     out_edges = [0, 0]
-    node_info(p, in_edges, out_edges)
+    node(p, in_edges, out_edges)
 
   def test_create_node(self):
     nid = self.cli.create_node("name")
@@ -43,7 +54,7 @@ class GraphTest(unittest.TestCase):
     src = self.cli.create_node("name")
     tgt = self.cli.create_node("name")
     prop = {"key1":"val1", "key2":"val2"}
-    ei = edge_info(prop, src, tgt)
+    ei = edge(prop, src, tgt)
     eid = self.cli.create_edge("name", tgt, ei)
 
 if __name__ == '__main__':

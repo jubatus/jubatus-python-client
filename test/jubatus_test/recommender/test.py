@@ -26,7 +26,8 @@ class RecommenderTest(unittest.TestCase):
             "string_rules": [{"key": "*", "type": "str",  "sample_weight": "bin", "global_weight": "bin"}],
             "num_types": {},
             "num_rules": [{"key": "*", "type": "num"}]
-        }
+        },
+        "parameter": {}
     }
 
     TestUtil.write_file('config_recommender.json', json.dumps(self.config))
@@ -47,7 +48,7 @@ class RecommenderTest(unittest.TestCase):
     d = datum(string_values, num_values)
     self.cli.update_row("name", "complete_row", d)
     d1 = self.cli.complete_row_from_id("name", "complete_row")
-    d2 = self.cli.complete_row_from_data("name", d)
+    d2 = self.cli.complete_row_from_datum("name", d)
 
   def test_similar_row(self):
     self.cli.clear_row("name", "similar_row")
@@ -56,7 +57,7 @@ class RecommenderTest(unittest.TestCase):
     d = datum(string_values, num_values)
     self.cli.update_row("name", "similar_row", d)
     s1 = self.cli.similar_row_from_id("name", "similar_row", 10)
-    s2 = self.cli.similar_row_from_data("name", d, 10)
+    s2 = self.cli.similar_row_from_datum("name", d, 10)
 
   def test_decode_row(self):
     self.cli.clear_row("name", "decode_row")
@@ -84,8 +85,8 @@ class RecommenderTest(unittest.TestCase):
     string_values = [("key1", "val1"), ("key2", "val2")]
     num_values = [("key1", 1.0), ("key2", 2.0)]
     d = datum(string_values, num_values)
-    self.assertAlmostEqual(self.cli.similarity("name", d, d), 1, 6)
-    self.assertAlmostEqual(self.cli.l2norm("name", d), sqrt(1*1 + 1*1+ 1*1 + 2*2), 6)
+    self.assertAlmostEqual(self.cli.calc_similarity("name", d, d), 1, 6)
+    self.assertAlmostEqual(self.cli.calc_l2norm("name", d), sqrt(1*1 + 1*1+ 1*1 + 2*2), 6)
 
   def test_clear(self):
     self.cli.clear("name")

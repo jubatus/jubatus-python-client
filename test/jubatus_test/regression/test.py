@@ -24,6 +24,10 @@ class RegressionTest(unittest.TestCase):
             "string_rules": [{"key": "*", "type": "str",  "sample_weight": "bin", "global_weight": "bin"}],
             "num_types": {},
             "num_rules": [{"key": "*", "type": "num"}]
+        },
+        "parameter": {
+            "sensitivity" : 0.1,
+            "regularization_weight" : 3.402823e+38
         }
     }
 

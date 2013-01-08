@@ -24,6 +24,9 @@ class ClassifierTest(unittest.TestCase):
             "string_rules": [{"key": "*", "type": "str",  "sample_weight": "bin", "global_weight": "bin"}],
             "num_types": {},
             "num_rules": [{"key": "*", "type": "num"}]
+        },
+        "parameter": {
+            "regularization_weight": 1.001
         }
     }
 
