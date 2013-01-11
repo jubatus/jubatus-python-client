@@ -13,12 +13,31 @@ git checkout "${JUBATUS_BRANCH}"
 popd
 
 # Python
+
+capitalize() {
+  echo "$(echo ${1:0:1} | tr 'a-z' 'A-Z')${1:1}"
+}
+
 rm -rf "${CLIENT_DIR}/jubatus"
+SERVICE_LIST=()
 for IDL in "${JUBATUS_DIR}/src/server"/*.idl; do
+  NAMESPACE="$(basename "${IDL}" ".idl")"
+  SERVICE_LIST[${#SERVICE_LIST[@]}]="${NAMESPACE}"
   mpidl python "${IDL}" -o "${CLIENT_DIR}/jubatus"
 done
 
 find "${CLIENT_DIR}/jubatus" -name "server.tmpl.py" -delete
-touch "${CLIENT_DIR}/jubatus/__init__.py"
+
+cat << _EOF_ > "${CLIENT_DIR}/jubatus/__init__.py"
+__all__ = [$(
+  for SERVICE in ${SERVICE_LIST[@]}; do
+    echo -n '"'${SERVICE}'", ';
+  done
+)]
+
+$(for SERVICE in ${SERVICE_LIST[@]}; do
+  echo "from jubatus.${SERVICE}.client import ${SERVICE} as $(capitalize "${SERVICE}")";
+done)
+_EOF_
 
 rm -rf "${JUBATUS_DIR}"
