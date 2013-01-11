@@ -3,3 +3,5 @@ include LICENSE
 include VERSION
 include jubatus/**/*.py
 include jubatus/*.py
+include test/jubatus_test/**/*.py
+include test/jubatus_test/*.py
