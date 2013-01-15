@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import unittest
-from jubatus.stat.client import stat
-from jubatus.stat.types  import *
-
-from jubatus_test.test_util import TestUtil
+import json
 
 from math import sqrt
+
+from jubatus.stat.client import stat
+from jubatus.stat.types  import *
+from jubatus_test.test_util import TestUtil
 
 host = "127.0.0.1"
 port = 21004
@@ -14,18 +15,20 @@ timeout = 10
 
 class StatTest(unittest.TestCase):
   def setUp(self):
-    self.srv = TestUtil.fork_process("stat", port)
+    self.config = {
+        "window_size": 10
+    }
+
+    TestUtil.write_file('config_stat.json', json.dumps(self.config))
+    self.srv = TestUtil.fork_process('stat', port, 'config_stat.json')
     self.cli = stat(host, port)
-    self.window_size = 10
-    cd = config_data(self.window_size)
-    self.cli.set_config("name", cd)
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
 
   def test_get_config(self):
     config = self.cli.get_config("name")
-    self.assertEqual(config.window_size, self.window_size)
+    self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_sum(self):
     self.cli.push("name", "sum", 1.0)
