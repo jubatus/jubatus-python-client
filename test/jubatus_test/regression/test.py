@@ -2,6 +2,7 @@
 
 import unittest
 import json
+import msgpackrpc
 
 from jubatus.regression.client import regression
 from jubatus.regression.types  import *
@@ -37,6 +38,9 @@ class RegressionTest(unittest.TestCase):
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
+
+  def test_get_client(self):
+    self.assertIsInstance(self.cli.get_client(), msgpackrpc.client.Client)
 
   def test_get_config(self):
     config = self.cli.get_config("name")

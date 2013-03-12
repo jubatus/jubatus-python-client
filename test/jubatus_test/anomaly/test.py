@@ -4,6 +4,7 @@ import unittest
 
 import json
 from math import sqrt
+import msgpackrpc
 
 from jubatus.anomaly.client import anomaly
 from jubatus.anomaly.types  import *
@@ -48,6 +49,9 @@ class anomalyTest(unittest.TestCase):
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
+
+  def test_get_client(self):
+    self.assertIsInstance(self.cli.get_client(), msgpackrpc.client.Client)
 
   def test_clear_row(self):
     d = datum([], [])
