@@ -30,6 +30,11 @@ popd
 
 find "${CLIENT_DIR}/jubatus" -name "server.tmpl.py" -delete
 
+
+for PATCH in $(find "${CLIENT_DIR}/patch" -maxdepth 1 -name "*.patch"); do
+  patch --no-backup-if-mismatch -p1 < "${PATCH}"
+done
+
 cat << _EOF_ > "${CLIENT_DIR}/jubatus/__init__.py"
 __all__ = [$(
   for SERVICE in ${SERVICE_LIST[@]}; do
