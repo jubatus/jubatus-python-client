@@ -2,6 +2,7 @@
 
 import unittest
 import json
+import msgpackrpc
 
 from jubatus.graph.client import graph
 from jubatus.graph.types  import *
@@ -36,6 +37,9 @@ class GraphTest(unittest.TestCase):
     in_edges = [0, 0]
     out_edges = [0, 0]
     node(p, in_edges, out_edges)
+
+  def test_get_client(self):
+    self.assertIsInstance(self.cli.get_client(), msgpackrpc.client.Client)
 
   def test_create_node(self):
     nid = self.cli.create_node("name")
