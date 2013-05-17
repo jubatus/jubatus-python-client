@@ -20,7 +20,7 @@ capitalize() {
 
 rm -rf "${CLIENT_DIR}/jubatus"
 SERVICE_LIST=()
-pushd "${JUBATUS_DIR}/src/server"
+pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
   NAMESPACE="$(basename "${IDL}" ".idl")"
   SERVICE_LIST[${#SERVICE_LIST[@]}]="${NAMESPACE}"
