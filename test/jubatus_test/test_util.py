@@ -36,7 +36,7 @@ class TestUtil:
       return proc
     except OSError as error:
       print 'Unable to fork. Error: %d (%s)' % (error.errno, error.strerror)
-      sys.exit(1)
+      raise error
 
   @staticmethod
   def kill_process(process):
