@@ -2,6 +2,7 @@ import os, sys
 import time
 import signal
 from threading import Timer
+import subprocess
 
 import msgpackrpc
 from msgpackrpc.error import *
@@ -27,31 +28,22 @@ class TestUtil:
   @staticmethod
   def fork_process(name, port = 9199, config = ""):
     cmd = "juba" + name
-
+    args = [cmd, "--rpc-port", str(port), "--configpath", config, "--thread", "100", "--datadir", "."]
     try:
-      child = os.fork()
-      if child == 0:
-        os.execvp(cmd, [cmd, "--rpc-port", str(port), "--configpath", config, "--thread", "100", "--datadir", "."])
-      elif child < 0:
-        print 'fork error'
-        sys.exit(1)
+      # use PIPE to surpress log messages of server processes
+      proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       TestUtil.wait_server(port)
-      return child
+      return proc
     except OSError as error:
       print 'Unable to fork. Error: %d (%s)' % (error.errno, error.strerror)
-      sys.exit(1)
+      raise error
 
   @staticmethod
-  def kill_process(child):
-    if os.kill(child, signal.SIGTERM) is not None:
-      print 'kill error'
-    t = Timer(3.0, os.kill, [child, signal.SIGKILL])
-    t.start()
-    os.waitpid(child, 0)
-    t.cancel()
+  def kill_process(process):
+    process.terminate()
+    process.wait()
 
   @staticmethod
   def write_file(path, data):
-    f = open(path, 'w')
-    f.write(data)
-    f.close()
+    with open(path, 'w') as f:
+      f.write(data)

@@ -20,20 +20,13 @@ capitalize() {
 
 rm -rf "${CLIENT_DIR}/jubatus"
 SERVICE_LIST=()
-pushd "${JUBATUS_DIR}/src/server"
+pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
   NAMESPACE="$(basename "${IDL}" ".idl")"
   SERVICE_LIST[${#SERVICE_LIST[@]}]="${NAMESPACE}"
-  mpidl python "${IDL}" -o "${CLIENT_DIR}/jubatus"
+  jenerator -l python "${IDL}" -o "${CLIENT_DIR}/jubatus"
 done
 popd
-
-find "${CLIENT_DIR}/jubatus" -name "server.tmpl.py" -delete
-
-
-for PATCH in $(find "${CLIENT_DIR}/patch" -maxdepth 1 -name "*.patch"); do
-  patch --no-backup-if-mismatch -p1 < "${PATCH}"
-done
 
 cat << _EOF_ > "${CLIENT_DIR}/jubatus/__init__.py"
 __all__ = [$(
