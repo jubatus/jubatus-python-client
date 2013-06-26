@@ -39,7 +39,7 @@ class RecommenderTest(unittest.TestCase):
     TestUtil.kill_process(self.srv)
 
   def test_get_client(self):
-    self.assertIsInstance(self.cli.get_client(), msgpackrpc.client.Client)
+    self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
   def test_get_config(self):
     config = self.cli.get_config("name")
