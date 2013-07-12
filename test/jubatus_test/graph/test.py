@@ -61,6 +61,16 @@ class GraphTest(unittest.TestCase):
     ei = edge(prop, src, tgt)
     eid = self.cli.create_edge("name", tgt, ei)
 
+  def test_str(self):
+    self.assertEqual("node{property: {}, in_edges: [], out_edges: []}",
+                     str(node({}, [], [])))
+    self.assertEqual("preset_query{edge_query: [], node_query: []}",
+                     str(preset_query([], [])))
+    self.assertEqual("edge{property: {}, source: src, target: tgt}",
+                     str(edge({}, 'src', 'tgt')))
+    self.assertEqual("shortest_path_query{source: src, target: tgt, max_hop: 10, query: preset_query{edge_query: [], node_query: []}}",
+                     str(shortest_path_query('src', 'tgt', 10, preset_query([], []))))
+
 if __name__ == '__main__':
   test_suite = unittest.TestLoader().loadTestsFromTestCase(GraphTest)
   unittest.TextTestRunner().run(test_suite)

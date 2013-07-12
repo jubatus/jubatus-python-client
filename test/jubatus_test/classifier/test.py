@@ -70,6 +70,9 @@ class ClassifierTest(unittest.TestCase):
   def test_get_status(self):
     self.cli.get_status("name")
 
+  def test_str(self):
+    self.assertEqual("estimate_result{label: label, score: 1.0}",
+                     str(estimate_result("label", 1.0)))
 
 
 if __name__ == '__main__':
