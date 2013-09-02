@@ -18,7 +18,11 @@ capitalize() {
   echo "$(echo ${1:0:1} | tr 'a-z' 'A-Z')${1:1}"
 }
 
-rm -rf "${CLIENT_DIR}/jubatus"
+for DIR in "${CLIENT_DIR}/jubatus/"*; do
+  if [ "$(basename "${DIR}")" != "common" ]; then
+    rm -rf $DIR
+  fi
+done
 SERVICE_LIST=()
 pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
