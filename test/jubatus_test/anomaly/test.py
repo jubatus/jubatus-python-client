@@ -9,6 +9,7 @@ import msgpackrpc
 from jubatus.anomaly.client import anomaly
 from jubatus.anomaly.types  import *
 from jubatus_test.test_util import TestUtil
+from jubatus.common import datum
 
 host = "127.0.0.1"
 port = 21006

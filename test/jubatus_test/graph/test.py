@@ -6,6 +6,7 @@ import msgpackrpc
 
 from jubatus.graph.client import graph
 from jubatus.graph.types  import *
+from jubatus.common import datum
 
 from jubatus_test.test_util import TestUtil
 

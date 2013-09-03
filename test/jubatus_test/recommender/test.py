@@ -9,6 +9,7 @@ import msgpackrpc
 from jubatus.recommender.client import recommender
 from jubatus.recommender.types  import *
 from jubatus_test.test_util import TestUtil
+from jubatus.common import datum
 
 host = "127.0.0.1"
 port = 21003

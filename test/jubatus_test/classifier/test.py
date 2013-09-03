@@ -7,6 +7,7 @@ import msgpackrpc
 from jubatus.classifier.client import classifier
 from jubatus.classifier.types  import *
 from jubatus_test.test_util import TestUtil
+from jubatus.common import datum
 
 host = "127.0.0.1"
 port = 21001
