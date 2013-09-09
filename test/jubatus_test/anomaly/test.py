@@ -46,7 +46,11 @@ class anomalyTest(unittest.TestCase):
 
     TestUtil.write_file('config_anomaly.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('anomaly', port, 'config_anomaly.json')
-    self.cli = anomaly(host, port)
+    try:
+      self.cli = anomaly(host, port, "name")
+    except:
+      TestUtil.kill_process(self.srv)
+      raise
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
@@ -56,47 +60,47 @@ class anomalyTest(unittest.TestCase):
 
   def test_clear_row(self):
     d = datum([], [])
-    res = self.cli.add("name", d)
-    self.assertEqual(self.cli.clear_row("name", res.id), True)
+    res = self.cli.add(d)
+    self.assertEqual(self.cli.clear_row(res.id), True)
     # TODO: return true when non existent id ..
-    # self.assertEqual(self.cli.clear_row("name", "non-existent-id"), False)
+    # self.assertEqual(self.cli.clear_row("non-existent-id"), False)
 
   def test_add(self):
     d = datum([], [])
-    res = self.cli.add("name", d)
+    res = self.cli.add(d)
 
   def test_update(self):
     d = datum([], [])
-    res = self.cli.add("name", d)
+    res = self.cli.add(d)
     d = datum([], [('val', 3.1)])
-    score = self.cli.update("name", res.id, d)
+    score = self.cli.update(res.id, d)
 
   def test_clear(self):
-    self.assertEqual(self.cli.clear("name"), True)
+    self.assertEqual(self.cli.clear(), True)
 
   def test_calc_score(self):
     d = datum([], [('val', 1.1)])
-    res = self.cli.add("name", d)
+    res = self.cli.add(d)
     d = datum([], [('val', 3.1)])
-    score = self.cli.calc_score("name", d)
+    score = self.cli.calc_score(d)
 
   def test_get_all_rows(self):
-    self.cli.get_all_rows("name")
+    self.cli.get_all_rows()
 
   def test_get_config(self):
-    config = self.cli.get_config("name")
+    config = self.cli.get_config()
     self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_save(self):
-    self.assertEqual(self.cli.save("name", "anomaly.save_test.model"), True)
+    self.assertEqual(self.cli.save("anomaly.save_test.model"), True)
 
   def test_load(self):
     model_name = "anomaly.load_test.model"
-    self.cli.save("name", model_name)
-    self.assertEqual(self.cli.load("name", model_name), True)
+    self.cli.save(model_name)
+    self.assertEqual(self.cli.load(model_name), True)
 
   def test_get_status(self):
-    self.cli.get_status("name")
+    self.cli.get_status()
 
 if __name__ == '__main__':
   test_suite = unittest.TestLoader().loadTestsFromTestCase(anomalyTest)

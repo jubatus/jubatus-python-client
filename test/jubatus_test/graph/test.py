@@ -26,7 +26,11 @@ class GraphTest(unittest.TestCase):
 
     TestUtil.write_file('config_graph.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('graph', port, 'config_graph.json')
-    self.cli = graph(host, port)
+    try:
+      self.cli = graph(host, port, "name")
+    except:
+      TestUtil.kill_process(self.srv)
+      raise
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
@@ -43,24 +47,24 @@ class GraphTest(unittest.TestCase):
     self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
   def test_create_node(self):
-    nid = self.cli.create_node("name")
+    nid = self.cli.create_node()
     self.assertEqual(str(int(nid)), nid)
 
   def test_remove_node(self):
-    nid = self.cli.create_node("name")
-    self.assertEqual(self.cli.remove_node("name", nid), True)
+    nid = self.cli.create_node()
+    self.assertEqual(self.cli.remove_node(nid), True)
 
   def test_update_node(self):
-    nid = self.cli.create_node("name")
+    nid = self.cli.create_node()
     prop = {"key1":"val1", "key2":"val2"}
-    self.assertEqual(self.cli.update_node("name", nid, prop), True)
+    self.assertEqual(self.cli.update_node(nid, prop), True)
 
   def test_create_edge(self):
-    src = self.cli.create_node("name")
-    tgt = self.cli.create_node("name")
+    src = self.cli.create_node()
+    tgt = self.cli.create_node()
     prop = {"key1":"val1", "key2":"val2"}
     ei = edge(prop, src, tgt)
-    eid = self.cli.create_edge("name", tgt, ei)
+    eid = self.cli.create_edge(tgt, ei)
 
   def test_str(self):
     self.assertEqual("node{property: {}, in_edges: [], out_edges: []}",

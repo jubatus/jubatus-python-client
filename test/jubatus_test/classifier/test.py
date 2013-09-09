@@ -34,7 +34,11 @@ class ClassifierTest(unittest.TestCase):
 
     TestUtil.write_file('config_classifier.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('classifier', port, 'config_classifier.json')
-    self.cli = classifier(host, port)
+    try:
+      self.cli = classifier(host, port, "name")
+    except:
+      TestUtil.kill_process(self.srv)
+      raise
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
@@ -43,7 +47,7 @@ class ClassifierTest(unittest.TestCase):
     self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
   def test_get_config(self):
-    config = self.cli.get_config("name")
+    config = self.cli.get_config()
     self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_train(self):
@@ -51,25 +55,25 @@ class ClassifierTest(unittest.TestCase):
     num_values = [["key1", 1.0], ["key2", 2.0]]
     d = datum(string_values, num_values)
     data = [["label", d]]
-    self.assertEqual(self.cli.train("name", data), 1)
+    self.assertEqual(self.cli.train(data), 1)
 
   def test_classify(self):
     string_values = [["key1", "val1"], ["key2", "val2"]]
     num_values = [["key1", 1.0], ["key2", 2.0]]
     d = datum(string_values, num_values)
     data = [d]
-    result = self.cli.classify("name", data)
+    result = self.cli.classify(data)
 
   def test_save(self):
-    self.assertEqual(self.cli.save("name", "classifier.save_test.model"), True)
+    self.assertEqual(self.cli.save("classifier.save_test.model"), True)
 
   def test_load(self):
     model_name = "classifier.load_test.model"
-    self.cli.save("name", model_name)
-    self.assertEqual(self.cli.load("name", model_name), True)
+    self.cli.save(model_name)
+    self.assertEqual(self.cli.load(model_name), True)
 
   def test_get_status(self):
-    self.cli.get_status("name")
+    self.cli.get_status()
 
   def test_str(self):
     self.assertEqual("estimate_result{label: label, score: 1.0}",

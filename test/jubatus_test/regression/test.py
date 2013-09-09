@@ -35,7 +35,11 @@ class RegressionTest(unittest.TestCase):
 
     TestUtil.write_file('config_regression.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('regression', port, 'config_regression.json')
-    self.cli = regression(host, port)
+    try:
+      self.cli = regression(host, port, "name")
+    except:
+      TestUtil.kill_process(self.srv)
+      raise
 
   def tearDown(self):
     TestUtil.kill_process(self.srv)
@@ -44,7 +48,7 @@ class RegressionTest(unittest.TestCase):
     self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
   def test_get_config(self):
-    config = self.cli.get_config("name")
+    config = self.cli.get_config()
     self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_train(self):
@@ -52,25 +56,25 @@ class RegressionTest(unittest.TestCase):
     num_values = [["key1", 1.0], ["key2", 2.0]]
     d = datum(string_values, num_values)
     data = [[1.0, d]]
-    self.assertEqual(self.cli.train("name", data), 1)
+    self.assertEqual(self.cli.train(data), 1)
 
   def test_estimate(self):
     string_values = [["key1", "val1"], ["key2", "val2"]]
     num_values = [["key1", 1.0], ["key2", 2.0]]
     d = datum(string_values, num_values)
     data = [d]
-    result = self.cli.estimate("name", data)
+    result = self.cli.estimate(data)
 
   def test_save(self):
-    self.assertEqual(self.cli.save("name", "regression.save_test.model"), True)
+    self.assertEqual(self.cli.save("regression.save_test.model"), True)
 
   def test_load(self):
     model_name = "regression.load_test.model"
-    self.cli.save("name", model_name)
-    self.assertEqual(self.cli.load("name", model_name), True)
+    self.cli.save(model_name)
+    self.assertEqual(self.cli.load(model_name), True)
 
   def test_get_status(self):
-    self.cli.get_status("name")
+    self.cli.get_status()
 
 
 
