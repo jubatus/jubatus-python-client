@@ -15,8 +15,9 @@ def translate_error(e):
         raise e
 
 class Client:
-    def __init__(self, client):
+    def __init__(self, client, name):
         self.client = client
+        self.name = name
 
     def call(self, method, args, ret_type, args_type):
         if len(args) != len(args_type):
@@ -25,7 +26,7 @@ class Client:
                 % (method, len(args_type), len(args))
             raise TypeError(message)
 
-        values = []
+        values = [self.name]
         for (v, t) in zip(args, args_type):
             values.append(t.to_msgpack(v))
 
