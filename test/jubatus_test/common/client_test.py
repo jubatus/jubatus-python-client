@@ -25,15 +25,15 @@ class AnyType:
 
 class ClientTest(unittest.TestCase):
     def test_unknown_method(self):
-        c = jubatus.common.Client(AlwaysRaiseUnknownMethod())
+        c = jubatus.common.Client(AlwaysRaiseUnknownMethod(), "name")
         self.assertRaises(jubatus.common.UnknownMethod, c.call, "test", [], None, [])
 
     def test_type_mismatch(self):
-        c = jubatus.common.Client(AlwaysRaiseTypeMismatch())
+        c = jubatus.common.Client(AlwaysRaiseTypeMismatch(), "name")
         self.assertRaises(jubatus.common.TypeMismatch, c.call, "test", [], None, [])
 
     def test_wrong_number_of_arguments(self):
-        c = jubatus.common.Client(Echo())
+        c = jubatus.common.Client(Echo(), "name")
         self.assertEquals("test", c.call("test", [], AnyType(), []))
 
 if __name__ == '__main__':
