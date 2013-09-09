@@ -147,9 +147,12 @@ class TUserDef:
         return self.type.from_msgpack(m)
 
     def to_msgpack(self, m):
-        check_type(m, self.type)
-        return m.to_msgpack()
-
+        if isinstance(m, self.type):
+            return m.to_msgpack()
+        elif isinstance(m, list) or isinstance(m, tuple):
+            return self.type.TYPE.to_msgpack(m)
+        else:
+            raise TypeError('type %s or tuple/list are expected, but %s is given' % (sef.type, type(m)))
 
 class TObject:
     def from_msgpack(self, m):
