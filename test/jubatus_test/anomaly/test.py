@@ -56,27 +56,27 @@ class anomalyTest(unittest.TestCase):
 
   def test_clear_row(self):
     d = datum([], [])
-    (row_id, score) = self.cli.add("name", d)
-    self.assertEqual(self.cli.clear_row("name", row_id), True)
+    res = self.cli.add("name", d)
+    self.assertEqual(self.cli.clear_row("name", res.id), True)
     # TODO: return true when non existent id ..
     # self.assertEqual(self.cli.clear_row("name", "non-existent-id"), False)
 
   def test_add(self):
     d = datum([], [])
-    (row_id, score) = self.cli.add("name", d)
+    res = self.cli.add("name", d)
 
   def test_update(self):
     d = datum([], [])
-    (row_id, score) = self.cli.add("name", d)
+    res = self.cli.add("name", d)
     d = datum([], [('val', 3.1)])
-    score = self.cli.update("name", row_id, d)
+    score = self.cli.update("name", res.id, d)
 
   def test_clear(self):
     self.assertEqual(self.cli.clear("name"), True)
 
   def test_calc_score(self):
     d = datum([], [('val', 1.1)])
-    (row_id, score) = self.cli.add("name", d)
+    res = self.cli.add("name", d)
     d = datum([], [('val', 3.1)])
     score = self.cli.calc_score("name", d)
 
