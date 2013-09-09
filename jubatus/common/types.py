@@ -1,3 +1,5 @@
+from datum import datum
+
 def check_type(value, typ):
     if not isinstance(value, typ):
         raise TypeError('type %s is expected, but %s is given' % (typ, type(value)))
@@ -53,6 +55,14 @@ class TBool(TPrimitive):
 class TString(TPrimitive):
     def __init__(self):
         TPrimitive.__init__(self, [str, unicode])
+
+class TDatum:
+    def from_msgpack(self, m):
+        return datum.from_msgpack(m)
+
+    def to_msgpack(self, m):
+        check_type(m, datum)
+        return m.to_msgpack()
 
 class TRaw(TPrimitive):
     def __init__(self):
