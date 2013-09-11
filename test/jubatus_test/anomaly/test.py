@@ -59,29 +59,29 @@ class anomalyTest(unittest.TestCase):
     self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
   def test_clear_row(self):
-    d = datum([], [])
+    d = datum()
     res = self.cli.add(d)
     self.assertEqual(self.cli.clear_row(res.id), True)
     # TODO: return true when non existent id ..
     # self.assertEqual(self.cli.clear_row("non-existent-id"), False)
 
   def test_add(self):
-    d = datum([], [])
+    d = datum()
     res = self.cli.add(d)
 
   def test_update(self):
-    d = datum([], [])
+    d = datum()
     res = self.cli.add(d)
-    d = datum([], [('val', 3.1)])
+    d = datum({'val': 3.1})
     score = self.cli.update(res.id, d)
 
   def test_clear(self):
     self.assertEqual(self.cli.clear(), True)
 
   def test_calc_score(self):
-    d = datum([], [('val', 1.1)])
+    d = datum({'val': 1.1})
     res = self.cli.add(d)
-    d = datum([], [('val', 3.1)])
+    d = datum({'val': 3.1})
     score = self.cli.calc_score(d)
 
   def test_get_all_rows(self):

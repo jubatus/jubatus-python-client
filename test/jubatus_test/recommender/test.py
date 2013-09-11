@@ -52,27 +52,21 @@ class RecommenderTest(unittest.TestCase):
 
   def test_complete_row(self):
     self.cli.clear_row("complete_row")
-    string_values = [("key1", "val1"), ("key2", "val2")]
-    num_values = [("key1", 1.0), ("key2", 2.0)]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     self.cli.update_row("complete_row", d)
     d1 = self.cli.complete_row_from_id("complete_row")
     d2 = self.cli.complete_row_from_datum(d)
 
   def test_similar_row(self):
     self.cli.clear_row("similar_row")
-    string_values = [("key1", "val1"), ("key2", "val2")]
-    num_values = [("key1", 1.0), ("key2", 2.0)]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     self.cli.update_row("similar_row", d)
     s1 = self.cli.similar_row_from_id("similar_row", 10)
     s2 = self.cli.similar_row_from_datum(d, 10)
 
   def test_decode_row(self):
     self.cli.clear_row("decode_row")
-    string_values = [("key1", "val1"), ("key2", "val2")]
-    num_values = [("key1", 1.0), ("key2", 2.0)]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     self.cli.update_row("decode_row", d)
     decoded_row = self.cli.decode_row("decode_row")
     self.assertEqual(d.string_values, decoded_row.string_values)
@@ -80,9 +74,7 @@ class RecommenderTest(unittest.TestCase):
 
   def test_get_row(self):
     self.cli.clear()
-    string_values = [("key1", "val1"), ("key2", "val2")]
-    num_values = [("key1", 1.0), ("key2", 2.0)]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     self.cli.update_row("get_row", d)
     row_names = self.cli.get_all_rows()
     self.assertEqual(row_names, ["get_row"])
@@ -91,9 +83,7 @@ class RecommenderTest(unittest.TestCase):
     self.cli.clear()
 
   def test_calcs(self):
-    string_values = [("key1", "val1"), ("key2", "val2")]
-    num_values = [("key1", 1.0), ("key2", 2.0)]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     self.assertAlmostEqual(self.cli.calc_similarity(d, d), 1, 6)
     self.assertAlmostEqual(self.cli.calc_l2norm(d), sqrt(1*1 + 1*1+ 1*1 + 2*2), 6)
 

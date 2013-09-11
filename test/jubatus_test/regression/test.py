@@ -52,16 +52,12 @@ class RegressionTest(unittest.TestCase):
     self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_train(self):
-    string_values = [["key1", "val1"], ["key2", "val2"]]
-    num_values = [["key1", 1.0], ["key2", 2.0]]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     data = [[1.0, d]]
     self.assertEqual(self.cli.train(data), 1)
 
   def test_estimate(self):
-    string_values = [["key1", "val1"], ["key2", "val2"]]
-    num_values = [["key1", 1.0], ["key2", 2.0]]
-    d = datum(string_values, num_values)
+    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     data = [d]
     result = self.cli.estimate(data)
 
