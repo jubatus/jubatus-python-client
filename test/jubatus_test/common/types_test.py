@@ -15,13 +15,13 @@ class TypeCheckTest(unittest.TestCase):
         self.assertRaises(ValueError, lambda: convert(type, value))
 
     def testInt(self):
-        self.assertTypeOf(TInt(True, 8), 1)
-        self.assertTypeError(TInt(True, 8), None)
-        self.assertTypeError(TInt(True, 8), "")
-        self.assertValueError(TInt(True, 8), 128)
-        self.assertValueError(TInt(True, 8), -129)
-        self.assertValueError(TInt(False, 8), 256)
-        self.assertValueError(TInt(False, 8), -1)
+        self.assertTypeOf(TInt(True, 1), 1)
+        self.assertTypeError(TInt(True, 1), None)
+        self.assertTypeError(TInt(True, 1), "")
+        self.assertValueError(TInt(True, 1), 128)
+        self.assertValueError(TInt(True, 1), -129)
+        self.assertValueError(TInt(False, 1), 256)
+        self.assertValueError(TInt(False, 1), -1)
 
     def testFloat(self):
         self.assertTypeOf(TFloat(), 1.3)
