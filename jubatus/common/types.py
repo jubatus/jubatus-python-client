@@ -26,8 +26,8 @@ class TPrimitive:
 class TInt(TPrimitive):
     def __init__(self, signed, byts):
         if signed:
-            self.max = (1L << 8 * (byts - 1)) - 1
-            self.min = - (1L << 8 * (byts - 1))
+            self.max = (1L << (8 * byts - 1)) - 1
+            self.min = - (1L << (8 * byts - 1))
         else:
             self.max = (1L << 8 * byts) - 1
             self.min = 0
