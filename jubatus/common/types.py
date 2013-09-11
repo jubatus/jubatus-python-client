@@ -24,24 +24,24 @@ class TPrimitive:
         return m
 
 class TInt(TPrimitive):
-    def __init__(self, signed, bits):
+    def __init__(self, signed, byts):
         if signed:
-            self.max = (1L << (bits - 1)) - 1
-            self.min = - (1L << (bits - 1))
+            self.max = (1L << 8 * (byts - 1)) - 1
+            self.min = - (1L << 8 * (byts - 1))
         else:
-            self.max = (1L << bits) - 1
+            self.max = (1L << 8 * byts) - 1
             self.min = 0
 
     def from_msgpack(self, m):
         check_types(m, [int, long])
         if not (self.min <= m and m <= self.max):
-            raise ValueError
+            raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
 
     def to_msgpack(self, m):
         check_types(m, [int, long])
         if not (self.min <= m and m <= self.max):
-            raise ValueError
+            raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
 
 class TFloat(TPrimitive):
