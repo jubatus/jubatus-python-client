@@ -4,9 +4,9 @@ import unittest
 import json
 import msgpackrpc
 
-from jubatus.graph.client import graph
+from jubatus.graph.client import Graph
 from jubatus.graph.types  import *
-from jubatus.common import datum
+from jubatus.common import Datum
 
 from jubatus_test.test_util import TestUtil
 
@@ -27,7 +27,7 @@ class GraphTest(unittest.TestCase):
     TestUtil.write_file('config_graph.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('graph', port, 'config_graph.json')
     try:
-      self.cli = graph(host, port, "name")
+      self.cli = Graph(host, port, "name")
     except:
       TestUtil.kill_process(self.srv)
       raise
@@ -38,10 +38,10 @@ class GraphTest(unittest.TestCase):
   def test_node_info(self):
     edge_query = [["a", "b"], ["c", "d"], ["e", "f"]]
     node_query = [["0", "1"], ["2", "3"]]
-    p = preset_query(edge_query, node_query)
+    p = PresetQuery(edge_query, node_query)
     in_edges = [0, 0]
     out_edges = [0, 0]
-    node(p, in_edges, out_edges)
+    Node(p, in_edges, out_edges)
 
   def test_get_client(self):
     self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
@@ -63,18 +63,18 @@ class GraphTest(unittest.TestCase):
     src = self.cli.create_node()
     tgt = self.cli.create_node()
     prop = {"key1":"val1", "key2":"val2"}
-    ei = edge(prop, src, tgt)
+    ei = Edge(prop, src, tgt)
     eid = self.cli.create_edge(tgt, ei)
 
   def test_str(self):
     self.assertEqual("node{property: {}, in_edges: [], out_edges: []}",
-                     str(node({}, [], [])))
+                     str(Node({}, [], [])))
     self.assertEqual("preset_query{edge_query: [], node_query: []}",
-                     str(preset_query([], [])))
+                     str(PresetQuery([], [])))
     self.assertEqual("edge{property: {}, source: src, target: tgt}",
-                     str(edge({}, 'src', 'tgt')))
+                     str(Edge({}, 'src', 'tgt')))
     self.assertEqual("shortest_path_query{source: src, target: tgt, max_hop: 10, query: preset_query{edge_query: [], node_query: []}}",
-                     str(shortest_path_query('src', 'tgt', 10, preset_query([], []))))
+                     str(ShortestPathQuery('src', 'tgt', 10, PresetQuery([], []))))
 
 if __name__ == '__main__':
   test_suite = unittest.TestLoader().loadTestsFromTestCase(GraphTest)

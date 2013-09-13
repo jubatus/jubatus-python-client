@@ -4,10 +4,10 @@ import unittest
 import json
 import msgpackrpc
 
-from jubatus.regression.client import regression
+from jubatus.regression.client import Regression
 from jubatus.regression.types  import *
 from jubatus_test.test_util import TestUtil
-from jubatus.common import datum
+from jubatus.common import Datum
 
 host = "127.0.0.1"
 port = 21002
@@ -36,7 +36,7 @@ class RegressionTest(unittest.TestCase):
     TestUtil.write_file('config_regression.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('regression', port, 'config_regression.json')
     try:
-      self.cli = regression(host, port, "name")
+      self.cli = Regression(host, port, "name")
     except:
       TestUtil.kill_process(self.srv)
       raise
@@ -52,12 +52,12 @@ class RegressionTest(unittest.TestCase):
     self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_train(self):
-    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
+    d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     data = [[1.0, d]]
     self.assertEqual(self.cli.train(data), 1)
 
   def test_estimate(self):
-    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
+    d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     data = [d]
     result = self.cli.estimate(data)
 

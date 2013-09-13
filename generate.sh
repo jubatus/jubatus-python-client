@@ -15,7 +15,7 @@ popd
 # Python
 
 capitalize() {
-  echo "$(echo ${1:0:1} | tr 'a-z' 'A-Z')${1:1}"
+  python -c "print ''.join(map(str.capitalize, '${1}'.split('_')))"
 }
 
 for DIR in "${CLIENT_DIR}/jubatus/"*; do
@@ -40,7 +40,7 @@ __all__ = [$(
 )]
 
 $(for SERVICE in ${SERVICE_LIST[@]}; do
-  echo "from jubatus.${SERVICE}.client import ${SERVICE} as $(capitalize "${SERVICE}")";
+  echo "from jubatus.${SERVICE}.client import $(capitalize "${SERVICE}")";
 done)
 _EOF_
 

@@ -4,10 +4,10 @@ import unittest
 import json
 import msgpackrpc
 
-from jubatus.classifier.client import classifier
+from jubatus.classifier.client import Classifier
 from jubatus.classifier.types  import *
 from jubatus_test.test_util import TestUtil
-from jubatus.common import datum
+from jubatus.common import Datum
 
 host = "127.0.0.1"
 port = 21001
@@ -35,7 +35,7 @@ class ClassifierTest(unittest.TestCase):
     TestUtil.write_file('config_classifier.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('classifier', port, 'config_classifier.json')
     try:
-      self.cli = classifier(host, port, "name")
+      self.cli = Classifier(host, port, "name")
     except:
       TestUtil.kill_process(self.srv)
       raise
@@ -51,12 +51,12 @@ class ClassifierTest(unittest.TestCase):
     self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
   def test_train(self):
-    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
+    d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     data = [["label", d]]
     self.assertEqual(self.cli.train(data), 1)
 
   def test_classify(self):
-    d = datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
+    d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     data = [d]
     result = self.cli.classify(data)
 
@@ -73,7 +73,7 @@ class ClassifierTest(unittest.TestCase):
 
   def test_str(self):
     self.assertEqual("estimate_result{label: label, score: 1.0}",
-                     str(estimate_result("label", 1.0)))
+                     str(EstimateResult("label", 1.0)))
 
 
 if __name__ == '__main__':

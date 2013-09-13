@@ -6,16 +6,16 @@ import json
 from math import sqrt
 import msgpackrpc
 
-from jubatus.anomaly.client import anomaly
+from jubatus.anomaly.client import Anomaly
 from jubatus.anomaly.types  import *
 from jubatus_test.test_util import TestUtil
-from jubatus.common import datum
+from jubatus.common import Datum
 
 host = "127.0.0.1"
 port = 21006
 timeout = 10
 
-class anomalyTest(unittest.TestCase):
+class AnomalyTest(unittest.TestCase):
   def setUp(self):
     self.config = {
      "method": "lof",
@@ -47,7 +47,7 @@ class anomalyTest(unittest.TestCase):
     TestUtil.write_file('config_anomaly.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('anomaly', port, 'config_anomaly.json')
     try:
-      self.cli = anomaly(host, port, "name")
+      self.cli = Anomaly(host, port, "name")
     except:
       TestUtil.kill_process(self.srv)
       raise
@@ -59,29 +59,29 @@ class anomalyTest(unittest.TestCase):
     self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
   def test_clear_row(self):
-    d = datum()
+    d = Datum()
     res = self.cli.add(d)
     self.assertEqual(self.cli.clear_row(res.id), True)
     # TODO: return true when non existent id ..
     # self.assertEqual(self.cli.clear_row("non-existent-id"), False)
 
   def test_add(self):
-    d = datum()
+    d = Datum()
     res = self.cli.add(d)
 
   def test_update(self):
-    d = datum()
+    d = Datum()
     res = self.cli.add(d)
-    d = datum({'val': 3.1})
+    d = Datum({'val': 3.1})
     score = self.cli.update(res.id, d)
 
   def test_clear(self):
     self.assertEqual(self.cli.clear(), True)
 
   def test_calc_score(self):
-    d = datum({'val': 1.1})
+    d = Datum({'val': 1.1})
     res = self.cli.add(d)
-    d = datum({'val': 3.1})
+    d = Datum({'val': 3.1})
     score = self.cli.calc_score(d)
 
   def test_get_all_rows(self):

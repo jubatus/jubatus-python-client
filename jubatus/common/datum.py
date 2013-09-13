@@ -1,4 +1,4 @@
-class datum:
+class Datum:
   def __init__(self, values = {}):
     self.string_values = []
     self.num_values = []
@@ -24,7 +24,7 @@ class datum:
 
   @staticmethod
   def from_msgpack (arg):
-    d = datum()
+    d = Datum()
     d.string_values = list(arg[0])
     d.num_values = list(arg[1])
     return d

@@ -1,4 +1,4 @@
-from datum import datum
+from datum import Datum
 
 def check_type(value, typ):
     if not isinstance(value, typ):
@@ -58,10 +58,10 @@ class TString(TPrimitive):
 
 class TDatum:
     def from_msgpack(self, m):
-        return datum.from_msgpack(m)
+        return Datum.from_msgpack(m)
 
     def to_msgpack(self, m):
-        check_type(m, datum)
+        check_type(m, Datum)
         return m.to_msgpack()
 
 class TRaw(TPrimitive):

@@ -6,7 +6,7 @@ import msgpackrpc
 
 from math import sqrt
 
-from jubatus.stat.client import stat
+from jubatus.stat.client import Stat
 from jubatus.stat.types  import *
 from jubatus_test.test_util import TestUtil
 
@@ -23,7 +23,7 @@ class StatTest(unittest.TestCase):
     TestUtil.write_file('config_stat.json', json.dumps(self.config))
     self.srv = TestUtil.fork_process('stat', port, 'config_stat.json')
     try:
-      self.cli = stat(host, port, 'name')
+      self.cli = Stat(host, port, 'name')
     except:
       TestUtil.kill_process(self.srv)
       raise
