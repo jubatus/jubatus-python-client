@@ -103,6 +103,6 @@ class AnomalyTest(unittest.TestCase):
     self.cli.get_status()
 
 if __name__ == '__main__':
-  test_suite = unittest.TestLoader().loadTestsFromTestCase(anomalyTest)
+  test_suite = unittest.TestLoader().loadTestsFromTestCase(AnomalyTest)
   unittest.TextTestRunner().run(test_suite)
 

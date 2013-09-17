@@ -1,4 +1,5 @@
 import msgpackrpc
+from types import *
 
 class TypeMismatch(Exception):
     pass
@@ -37,3 +38,28 @@ class Client:
 
         if ret_type != None:
             return ret_type.from_msgpack(ret)
+
+class ClientBase:
+    def __init__ (self, host, port, name, timeout=10):
+        address = msgpackrpc.Address(host, port)
+        self.client = msgpackrpc.Client(address, timeout=timeout)
+        self.jubatus_client = Client(self.client, name)
+
+    def get_client (self):
+        return self.client
+
+    def save(self, id):
+        return self.jubatus_client.call("save", [id], TBool(), [TString()])
+
+    def load(self, id):
+      return self.jubatus_client.call("load", [id], TBool(), [TString()])
+
+    def get_config(self):
+        return self.jubatus_client.call("get_config", [], TString(), [])
+
+    def get_status(self):
+        return self.jubatus_client.call(
+            "get_status",
+            [],
+            TMap(TString(), TMap(TString(), TString())),
+            [])
