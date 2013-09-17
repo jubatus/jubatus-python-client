@@ -8,11 +8,11 @@ class Datum:
         raise TypeError
 
       if isinstance(v, str) or isinstance(v, unicode):
-        self.string_values.append((k, v))
+        self.string_values.append([k, v])
       elif isinstance(v, float):
-        self.num_values.append((k, v))
+        self.num_values.append([k, v])
       elif isinstance(v, int):
-        self.num_values.append((k, float(v)))
+        self.num_values.append([k, float(v)])
       else:
         raise TypeError
 
