@@ -5,21 +5,24 @@ import msgpack
 class DatumTest(unittest.TestCase):
     def test_pack(self):
         self.assertEquals(
-            msgpack.packb(([['name', 'Taro']], [['age', 20.0]])),
+            msgpack.packb(([['name', 'Taro']], [['age', 20.0]], [])),
             msgpack.packb(Datum({'name': 'Taro', 'age': 20}).to_msgpack()))
 
     def test_unpack(self):
-        d = Datum.from_msgpack(([['name', 'Taro']], [['age', 20.0]]))
+        d = Datum.from_msgpack(([['name', 'Taro']], [['age', 20.0]], [['img', '0101']]))
         self.assertEquals(
             [['name', 'Taro']],
             d.string_values)
         self.assertEquals(
             [['age', 20.0]],
             d.num_values)
+        self.assertEquals(
+            [['img', '0101']],
+            d.binary_values)
 
     def test_empty(self):
         self.assertEquals(
-            msgpack.packb(([], [])),
+            msgpack.packb(([], [], [])),
             msgpack.packb(Datum().to_msgpack()))
 
     def test_invalid_key(self):
@@ -61,6 +64,18 @@ class DatumTest(unittest.TestCase):
         d = Datum()
         self.assertRaises(TypeError, Datum.add_number, d, 1, 1.0)
         self.assertRaises(TypeError, Datum.add_number, d, 'key', '')
+
+    def test_add_binary(self):
+        d = Datum()
+        d.add_binary('key', 'value')
+        self.assertEquals(
+            ([], [], [['key', 'value']]),
+            d.to_msgpack())
+
+    def test_invalid_add_binary(self):
+        d = Datum()
+        self.assertRaises(TypeError, Datum.add_binary, d, 1, 1.0)
+        self.assertRaises(TypeError, Datum.add_binary, d, 'key', 1)
 
 if __name__ == '__main__':
     unittest.main()
