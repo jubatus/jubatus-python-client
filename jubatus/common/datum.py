@@ -16,6 +16,24 @@ class Datum:
       else:
         raise TypeError
 
+  def add_string(self, key, value):
+    if not (isinstance(key, str) or isinstance(key, unicode)):
+      raise TypeError
+    if isinstance(value, str) or isinstance(value, unicode):
+      self.string_values.append([key, value])
+    else:
+      raise TypeError
+
+  def add_number(self, key, value):
+    if not (isinstance(key, str) or isinstance(key, unicode)):
+      raise TypeError
+    if isinstance(value, float):
+      self.num_values.append([key, value])
+    elif isinstance(value, int):
+      self.num_values.append([key, float(value)])
+    else:
+      raise TypeError
+
   def to_msgpack (self):
     return (
       self.string_values,

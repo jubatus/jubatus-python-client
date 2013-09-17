@@ -29,6 +29,38 @@ class DatumTest(unittest.TestCase):
         self.assertRaises(TypeError, Datum, {'': None})
         self.assertRaises(TypeError, Datum, {'': []})
 
+    def test_add_string(self):
+        d = Datum()
+        d.add_string('key', 'value')
+        self.assertEquals(Datum({'key': 'value'}).to_msgpack(),
+                          d.to_msgpack())
+
+        d = Datum()
+        d.add_string(u'key', u'value')
+        self.assertEquals(Datum({'key': 'value'}).to_msgpack(),
+                          d.to_msgpack())
+
+    def test_invalid_add_string(self):
+        d = Datum()
+        self.assertRaises(TypeError, Datum.add_string, d, 1, 'value')
+        self.assertRaises(TypeError, Datum.add_string, d, 'key', 1)
+
+    def test_add_number(self):
+        d = Datum()
+        d.add_number('key', 1.0)
+        self.assertEquals(Datum({'key': 1.0}).to_msgpack(),
+                          d.to_msgpack())
+
+    def test_add_int(self):
+        d = Datum()
+        d.add_number('key', 1)
+        self.assertEquals(Datum({'key': 1.0}).to_msgpack(),
+                          d.to_msgpack())
+
+    def test_invalid_add_number(self):
+        d = Datum()
+        self.assertRaises(TypeError, Datum.add_number, d, 1, 1.0)
+        self.assertRaises(TypeError, Datum.add_number, d, 'key', '')
 
 if __name__ == '__main__':
     unittest.main()
