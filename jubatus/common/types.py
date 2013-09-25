@@ -5,9 +5,8 @@ def check_type(value, typ):
         raise TypeError('type %s is expected, but %s is given' % (typ, type(value)))
 
 def check_types(value, types):
-    for t in types:
-        if isinstance(value, t):
-            return
+    if isinstance(value, types):
+        return
     t = ', '.join([str(t) for t in types])
     raise TypeError('type %s is expected, but %s is given' % (t, type(value)))
 
@@ -33,28 +32,28 @@ class TInt(TPrimitive):
             self.min = 0
 
     def from_msgpack(self, m):
-        check_types(m, [int, long])
+        check_types(m, (int, long))
         if not (self.min <= m and m <= self.max):
             raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
 
     def to_msgpack(self, m):
-        check_types(m, [int, long])
+        check_types(m, (int, long))
         if not (self.min <= m and m <= self.max):
             raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
 
 class TFloat(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, [float])
+        TPrimitive.__init__(self, (float,))
 
 class TBool(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, [bool])
+        TPrimitive.__init__(self, (bool,))
 
 class TString(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, [str, unicode])
+        TPrimitive.__init__(self, (str, unicode))
 
 class TDatum:
     def from_msgpack(self, m):
@@ -66,7 +65,7 @@ class TDatum:
 
 class TRaw(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, [str])
+        TPrimitive.__init__(self, (str,))
 
 class TNullable:
     def __init__(self, type):
@@ -89,11 +88,11 @@ class TList:
         self.type = type
 
     def from_msgpack(self, m):
-        check_types(m, [list, tuple])
+        check_types(m, (list, tuple))
         return map(self.type.from_msgpack, m)
 
     def to_msgpack(self, m):
-        check_types(m, [list, tuple])
+        check_types(m, (list, tuple))
         return map(self.type.to_msgpack, m)
 
 class TMap:
@@ -104,7 +103,7 @@ class TMap:
     def from_msgpack(self, m):
         check_type(m, dict)
         dic = {}
-        for k, v in m.items():
+        for k, v in m.iteritems():
             dic[self.key.from_msgpack(k)] = self.value.from_msgpack(v)
         return dic
 
@@ -120,7 +119,7 @@ class TTuple:
         self.types = types
 
     def check_tuple(self, m):
-        check_types(m, [tuple, list])
+        check_types(m, (tuple, list))
         if len(m) != len(self.types):
             raise TypeError("size of tuple is %d, but %d is expected: %s" % (len(m), len(self.types), str(m)))
 
@@ -149,7 +148,7 @@ class TUserDef:
     def to_msgpack(self, m):
         if isinstance(m, self.type):
             return m.to_msgpack()
-        elif isinstance(m, list) or isinstance(m, tuple):
+        elif isinstance(m, (list, tuple)):
             return self.type.TYPE.to_msgpack(m)
         else:
             raise TypeError('type %s or tuple/list are expected, but %s is given' % (sef.type, type(m)))
@@ -166,13 +165,13 @@ class TEnum:
         self.values = values
 
     def from_msgpack(self, m):
-        check_types(m, [int, long])
-        if not (m in self.values):
+        check_types(m, (int, long))
+        if m not in self.values:
             raise ValueError
         return m
 
     def to_msgpack(self, m):
-        check_types(m, [int, long])
-        if not (m in self.values):
+        check_types(m, (int, long))
+        if m not in self.values:
             raise ValueError
         return m

@@ -40,12 +40,12 @@ class Client:
             return ret_type.from_msgpack(ret)
 
 class ClientBase:
-    def __init__ (self, host, port, name, timeout=10):
+    def __init__(self, host, port, name, timeout=10):
         address = msgpackrpc.Address(host, port)
         self.client = msgpackrpc.Client(address, timeout=timeout)
         self.jubatus_client = Client(self.client, name)
 
-    def get_client (self):
+    def get_client(self):
         return self.client
 
     def save(self, id):

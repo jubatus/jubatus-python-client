@@ -5,10 +5,10 @@ class Datum:
     self.binary_values = []
 
     for (k, v) in values.iteritems():
-      if not (isinstance(k, str) or isinstance(k, unicode)):
+      if not isinstance(k, (str, unicode)):
         raise TypeError
 
-      if isinstance(v, str) or isinstance(v, unicode):
+      if isinstance(v, (str, unicode)):
         self.string_values.append([k, v])
       elif isinstance(v, float):
         self.num_values.append([k, v])
@@ -18,15 +18,15 @@ class Datum:
         raise TypeError
 
   def add_string(self, key, value):
-    if not (isinstance(key, str) or isinstance(key, unicode)):
+    if not isinstance(key, (str, unicode)):
       raise TypeError
-    if isinstance(value, str) or isinstance(value, unicode):
+    if isinstance(value, (str, unicode)):
       self.string_values.append([key, value])
     else:
       raise TypeError
 
   def add_number(self, key, value):
-    if not (isinstance(key, str) or isinstance(key, unicode)):
+    if not isinstance(key, (str, unicode)):
       raise TypeError
     if isinstance(value, float):
       self.num_values.append([key, value])
@@ -36,14 +36,14 @@ class Datum:
       raise TypeError
 
   def add_binary(self, key, value):
-    if not (isinstance(key, str) or isinstance(key, unicode)):
+    if not isinstance(key, (str, unicode)):
       raise TypeError
     if isinstance(value, str):
       self.binary_values.append([key, value])
     else:
       raise TypeError
 
-  def to_msgpack (self):
+  def to_msgpack(self):
     return (
       self.string_values,
       self.num_values,
@@ -51,7 +51,7 @@ class Datum:
       )
 
   @staticmethod
-  def from_msgpack (arg):
+  def from_msgpack(arg):
     d = Datum()
     d.string_values = list(arg[0])
     d.num_values = list(arg[1])
