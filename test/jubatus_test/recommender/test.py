@@ -69,8 +69,8 @@ class RecommenderTest(unittest.TestCase):
     d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
     self.cli.update_row("decode_row", d)
     decoded_row = self.cli.decode_row("decode_row")
-    self.assertEqual(d.string_values, decoded_row.string_values)
-    self.assertEqual(d.num_values, decoded_row.num_values)
+    self.assertEqual(json.dumps(d.string_values), json.dumps(decoded_row.string_values))
+    self.assertEqual(json.dumps(d.num_values), json.dumps(decoded_row.num_values))
 
   def test_get_row(self):
     self.cli.clear()
