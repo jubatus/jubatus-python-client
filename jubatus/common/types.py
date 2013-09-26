@@ -10,7 +10,7 @@ def check_types(value, types):
     t = ', '.join([str(t) for t in types])
     raise TypeError('type %s is expected, but %s is given' % (t, type(value)))
 
-class TPrimitive:
+class TPrimitive(object):
     def __init__(self, types):
         self.types = types
 
@@ -22,7 +22,7 @@ class TPrimitive:
         check_types(m, self.types)
         return m
 
-class TInt(TPrimitive):
+class TInt(object):
     def __init__(self, signed, byts):
         if signed:
             self.max = (1L << (8 * byts - 1)) - 1
@@ -45,17 +45,17 @@ class TInt(TPrimitive):
 
 class TFloat(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, (float,))
+        super(TFloat, self).__init__((float,))
 
 class TBool(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, (bool,))
+        super(TBool, self).__init__((bool,))
 
 class TString(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, (str, unicode))
+        super(TString, self).__init__((str, unicode))
 
-class TDatum:
+class TDatum(object):
     def from_msgpack(self, m):
         return Datum.from_msgpack(m)
 
@@ -65,9 +65,9 @@ class TDatum:
 
 class TRaw(TPrimitive):
     def __init__(self):
-        TPrimitive.__init__(self, (str,))
+        super(TRaw, self).__init__((str,))
 
-class TNullable:
+class TNullable(object):
     def __init__(self, type):
         self.type = type
 
@@ -83,7 +83,7 @@ class TNullable:
         else:
             self.type.to_msgpack(m)
 
-class TList:
+class TList(object):
     def __init__(self, type):
         self.type = type
 
@@ -95,7 +95,7 @@ class TList:
         check_types(m, (list, tuple))
         return map(self.type.to_msgpack, m)
 
-class TMap:
+class TMap(object):
     def __init__(self, key, value):
         self.key = key
         self.value = value
@@ -114,7 +114,7 @@ class TMap:
             dic[self.key.to_msgpack(k)] = self.value.to_msgpack(v)
         return dic
 
-class TTuple:
+class TTuple(object):
     def __init__(self, *types):
         self.types = types
 
@@ -138,7 +138,7 @@ class TTuple:
         return tpl
             
 
-class TUserDef:
+class TUserDef(object):
     def __init__(self, type):
         self.type = type
 
@@ -153,14 +153,14 @@ class TUserDef:
         else:
             raise TypeError('type %s or tuple/list are expected, but %s is given' % (sef.type, type(m)))
 
-class TObject:
+class TObject(object):
     def from_msgpack(self, m):
         return m
 
     def to_msgpack(self, m):
         return m
 
-class TEnum:
+class TEnum(object):
     def __init__(self, values):
         self.values = values
 
