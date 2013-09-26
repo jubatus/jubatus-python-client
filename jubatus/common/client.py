@@ -15,7 +15,7 @@ def translate_error(e):
     else:
         raise e
 
-class Client:
+class Client(object):
     def __init__(self, client, name):
         self.client = client
         self.name = name
@@ -39,7 +39,7 @@ class Client:
         if ret_type != None:
             return ret_type.from_msgpack(ret)
 
-class ClientBase:
+class ClientBase(object):
     def __init__(self, host, port, name, timeout=10):
         address = msgpackrpc.Address(host, port)
         self.client = msgpackrpc.Client(address, timeout=timeout)
