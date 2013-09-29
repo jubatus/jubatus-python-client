@@ -6,14 +6,14 @@ class TypeMismatch(Exception):
 class UnknownMethod(Exception):
     pass
 
-def translate_error(e):
-    if e.message == 1:
+def error_handler(e):
+    if e == 1:
         raise UnknownMethod()
-    elif e.message == 2:
+    elif e == 2:
         # TODO(unno) we cannot get which arugment is illegal
         raise TypeMismatch()
     else:
-        raise e
+        raise msgpackrpc.error.RPCError(e)
 
 class Client(object):
     def __init__(self, client, name):
@@ -31,10 +31,9 @@ class Client(object):
         for (v, t) in zip(args, args_type):
             values.append(t.to_msgpack(v))
 
-        try:
-            ret = self.client.call(method, *values)
-        except msgpackrpc.error.RPCError, e:
-            translate_error(e)
+        future = self.client.call_async(method, *values)
+        future.attach_error_handler(error_handler)
+        ret = future.get()
 
         if ret_type != None:
             return ret_type.from_msgpack(ret)

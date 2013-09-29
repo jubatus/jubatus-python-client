@@ -2,21 +2,43 @@ import msgpackrpc
 import unittest
 import jubatus.common
 
+class DummyFuture(object):
+    def __init__(self, response, error):
+        self.response = response
+        self.error = error
+        self.handler = None
+
+    def attach_error_handler(self, handler):
+        self.handler = handler
+
+    def get(self):
+        if self.error:
+            if self.handler:
+                self.handler(self.error)
+            else:
+                raise msgpack.rpc.error.RPCError(self.error)
+        else:
+            return self.response
+
+class DummyClient(object):
+    def call_async(self, method, *args):
+        return self.send_request(method, args)
+
 # When a given method is not supported, jubatus-rpc server returns error code 1
-class AlwaysRaiseUnknownMethod:
-    def call(self, method, *args):
-        raise msgpackrpc.error.RPCError(1)
+class AlwaysRaiseUnknownMethod(DummyClient):
+    def send_request(self, method, args):
+        return DummyFuture(None, 1)
 
 # When given arguments cannot be parsed, jubatus-rpc server returns error code 2
-class AlwaysRaiseTypeMismatch:
-    def call(self, method, *args):
-        raise msgpackrpc.error.RPCError(2)
+class AlwaysRaiseTypeMismatch(DummyClient):
+    def send_request(self, method, args):
+        return DummyFuture(None, 2)
 
-class Echo:
-    def call(self, method, *args):
-        return method
+class Echo(DummyClient):
+    def send_request(self, method, args):
+        return DummyFuture(method, None)
 
-class AnyType:
+class AnyType(object):
     def to_msgpack(self, v):
         return v
 
