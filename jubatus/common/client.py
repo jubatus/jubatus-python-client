@@ -1,9 +1,11 @@
 import msgpackrpc
 from types import *
 
-class TypeMismatch(Exception):
+class InterfaceMismatch(Exception):
     pass
-class UnknownMethod(Exception):
+class TypeMismatch(InterfaceMismatch):
+    pass
+class UnknownMethod(InterfaceMismatch):
     pass
 
 def error_handler(e):
