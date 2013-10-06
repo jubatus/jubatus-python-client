@@ -151,7 +151,7 @@ class TUserDef(object):
         elif isinstance(m, (list, tuple)):
             return self.type.TYPE.to_msgpack(m)
         else:
-            raise TypeError('type %s or tuple/list are expected, but %s is given' % (sef.type, type(m)))
+            raise TypeError('type %s or tuple/list are expected, but %s is given' % (self.type, type(m)))
 
 class TObject(object):
     def from_msgpack(self, m):
