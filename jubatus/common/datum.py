@@ -1,3 +1,5 @@
+from message_string_generator import MessageStringGenerator
+
 class Datum:
     def __init__(self, values = {}):
         self.string_values = []
@@ -59,7 +61,7 @@ class Datum:
         return d
 
     def __str__(self):
-        gen = jubatus.common.MessageStringGenerator()
+        gen = MessageStringGenerator()
         gen.open("datum")
         gen.add("string_values", self.string_values)
         gen.add("num_values", self.num_values)
