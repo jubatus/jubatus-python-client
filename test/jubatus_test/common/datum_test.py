@@ -77,5 +77,13 @@ class DatumTest(unittest.TestCase):
         self.assertRaises(TypeError, Datum.add_binary, d, 1, 1.0)
         self.assertRaises(TypeError, Datum.add_binary, d, 'key', 1)
 
+    def test_str(self):
+        d = Datum()
+        d.add_string('name', 'john')
+        d.add_number('age', 20)
+        d.add_binary('image', '0101')
+        self.assertEquals('datum{string_values: [[\'name\', \'john\']], num_values: [[\'age\', 20.0]], binary_values: [[\'image\', \'0101\']]}',
+                          str(d))
+
 if __name__ == '__main__':
     unittest.main()
