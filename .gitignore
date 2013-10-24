@@ -8,3 +8,4 @@ jubatus/*
 *.xml
 *.json
 *~
+build/
