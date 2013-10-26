@@ -11,13 +11,13 @@ class DatumTest(unittest.TestCase):
     def test_unpack(self):
         d = Datum.from_msgpack(([['name', 'Taro']], [['age', 20.0]], [['img', '0101']]))
         self.assertEquals(
-            [['name', 'Taro']],
+            [('name', 'Taro')],
             d.string_values)
         self.assertEquals(
-            [['age', 20.0]],
+            [('age', 20.0)],
             d.num_values)
         self.assertEquals(
-            [['img', '0101']],
+            [('img', '0101')],
             d.binary_values)
 
     def test_empty(self):

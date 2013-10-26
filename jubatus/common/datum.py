@@ -1,6 +1,11 @@
 from message_string_generator import MessageStringGenerator
+from types import *
 
 class Datum:
+    TYPE = TTuple(TList(TTuple(TString(), TString())),
+                  TList(TTuple(TString(), TFloat())),
+                  TList(TTuple(TString(), TRaw())))
+
     def __init__(self, values = {}):
         self.string_values = []
         self.num_values = []
@@ -54,10 +59,11 @@ class Datum:
 
     @staticmethod
     def from_msgpack(arg):
+        val = Datum.TYPE.from_msgpack(arg)
         d = Datum()
-        d.string_values = list(arg[0])
-        d.num_values = list(arg[1])
-        d.binary_values = list(arg[2])
+        d.string_values = val[0]
+        d.num_values = val[1]
+        d.binary_values = val[2]
         return d
 
     def __str__(self):

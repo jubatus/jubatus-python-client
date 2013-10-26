@@ -1,5 +1,3 @@
-from datum import Datum
-
 def check_type(value, typ):
     if not isinstance(value, typ):
         raise TypeError('type %s is expected, but %s is given' % (typ, type(value)))
@@ -57,9 +55,11 @@ class TString(TPrimitive):
 
 class TDatum(object):
     def from_msgpack(self, m):
+        from datum import Datum
         return Datum.from_msgpack(m)
 
     def to_msgpack(self, m):
+        from datum import Datum
         check_type(m, Datum)
         return m.to_msgpack()
 
