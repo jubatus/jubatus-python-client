@@ -48,6 +48,12 @@ class TypeCheckTest(unittest.TestCase):
         self.assertTypeOf(TList(TList(TInt(True, 8))), [[1, 2], [], [2, 3]])
         self.assertTypeError(TList(TInt(True, 8)), None)
 
+    def testMap(self):
+        self.assertTypeOf(TMap(TString(), TBool()), {"true": True})
+        self.assertTypeError(TMap(TString(), TBool()), None)
+        self.assertTypeError(TMap(TString(), TBool()), {1: True})
+        self.assertTypeError(TMap(TString(), TBool()), {"true": 1})
+
     def testTuple(self):
         self.assertTypeOf(TTuple(TInt(True, 8), TTuple(TString(), TInt(True, 8))), (1, ("test", 1)))
         self.assertTypeError(TTuple(TInt(True, 8)), ("test", ))
