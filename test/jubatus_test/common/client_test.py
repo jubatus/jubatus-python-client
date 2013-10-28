@@ -34,6 +34,10 @@ class AlwaysRaiseTypeMismatch(DummyClient):
     def send_request(self, method, args):
         return DummyFuture(None, 2)
 
+class AlwaysRaiseRemoteError(DummyClient):
+    def send_request(self, method, args):
+        return DummyFuture(None, "error")
+
 class Echo(DummyClient):
     def send_request(self, method, args):
         return DummyFuture(method, None)
@@ -53,6 +57,10 @@ class ClientTest(unittest.TestCase):
     def test_type_mismatch(self):
         c = jubatus.common.Client(AlwaysRaiseTypeMismatch(), "name")
         self.assertRaises(jubatus.common.TypeMismatch, c.call, "test", [], None, [])
+
+    def test_remote_error(self):
+        c = jubatus.common.Client(AlwaysRaiseRemoteError(), "name")
+        self.assertRaises(msgpackrpc.error.RPCError, c.call, "test", [], None, [])
 
     def test_wrong_number_of_arguments(self):
         c = jubatus.common.Client(Echo(), "name")
