@@ -64,6 +64,31 @@ class TypeCheckTest(unittest.TestCase):
         self.assertTypeError(TTuple(TInt(True, 8)), ("test", ))
         self.assertTypeError(TTuple(TInt(True, 8)), (1, 2))
 
+    def testUserDef(self):
+        class MyType:
+            TYPE = TTuple(TString(), TFloat())
+
+            def __init__(self, v1, v2):
+                self.v1 = v1
+                self.v2 = v2
+
+            def to_msgpack(self):
+                t = (self.v1, self.v2)
+                return self.__class__.TYPE.to_msgpack(t)
+
+            @classmethod
+            def from_msgpack(cls, arg):
+                val = cls.TYPE.from_msgpack(arg)
+                return MyType(*val)
+
+        typ = TUserDef(MyType)
+        obj = typ.from_msgpack(("hoge", 1.0))
+        self.assertTrue(isinstance(obj, MyType))
+        self.assertEquals(["hoge", 1.0], typ.to_msgpack(obj))
+
+        self.assertTypeError(typ, 1)
+        self.assertTypeError(typ, [])
+        self.assertTypeError(typ, None)
 
 if __name__ == '__main__':
     unittest.main()
