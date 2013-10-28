@@ -1,18 +1,18 @@
 from jubatus.common import *
 import unittest
 
-def convert(type, value):
-    return type.from_msgpack(value)
-
 class TypeCheckTest(unittest.TestCase):
     def assertTypeOf(self, type, value):
-        self.assertEquals(value, convert(type, value))
+        self.assertEquals(value, type.from_msgpack(value))
+        self.assertEquals(value, type.to_msgpack(value))
 
     def assertTypeError(self, type, value):
-        self.assertRaises(TypeError, lambda: convert(type, value))
+        self.assertRaises(TypeError, lambda: type.from_msgpack(value))
+        self.assertRaises(TypeError, lambda: type.to_msgpack(value))
 
     def assertValueError(self, type, value):
-        self.assertRaises(ValueError, lambda: convert(type, value))
+        self.assertRaises(ValueError, lambda: type.from_msgpack(value))
+        self.assertRaises(ValueError, lambda: type.to_msgpack(value))
 
     def testInt(self):
         self.assertTypeOf(TInt(True, 1), 1)
@@ -60,7 +60,13 @@ class TypeCheckTest(unittest.TestCase):
         self.assertTypeError(TMap(TString(), TBool()), {"true": 1})
 
     def testTuple(self):
-        self.assertTypeOf(TTuple(TInt(True, 8), TTuple(TString(), TInt(True, 8))), (1, ("test", 1)))
+        typ = TTuple(TInt(True, 8), TTuple(TString(), TInt(True, 8)))
+        self.assertEquals(
+            [1, ["test", 1]],
+            typ.to_msgpack((1, ("test", 1))))
+        self.assertEquals(
+            (1, ("test", 1)),
+            typ.from_msgpack((1, ("test", 1))))
         self.assertTypeError(TTuple(TInt(True, 8)), ("test", ))
         self.assertTypeError(TTuple(TInt(True, 8)), (1, 2))
 
