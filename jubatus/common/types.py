@@ -75,13 +75,13 @@ class TNullable(object):
         if m is None:
             return None
         else:
-            self.type.from_msgpack(m)
+            return self.type.from_msgpack(m)
 
     def to_msgpack(self, m):
         if m is None:
             return None
         else:
-            self.type.to_msgpack(m)
+            return self.type.to_msgpack(m)
 
 class TList(object):
     def __init__(self, type):

@@ -43,6 +43,11 @@ class TypeCheckTest(unittest.TestCase):
         self.assertTypeError(TRaw(), u"test")
         self.assertTypeError(TRaw(), 1)
 
+    def testNullable(self):
+        self.assertTypeOf(TNullable(TBool()), None)
+        self.assertTypeOf(TNullable(TBool()), True)
+        self.assertTypeError(TNullable(TBool()), 1)
+
     def testList(self):
         self.assertTypeOf(TList(TInt(True, 8)), [1, 2, 3])
         self.assertTypeOf(TList(TList(TInt(True, 8))), [[1, 2], [], [2, 3]])
