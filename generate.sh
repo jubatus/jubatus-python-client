@@ -28,7 +28,9 @@ pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
   NAMESPACE="$(basename "${IDL}" ".idl")"
   SERVICE_LIST[${#SERVICE_LIST[@]}]="${NAMESPACE}"
-  jenerator -l python "${IDL}" -o "${CLIENT_DIR}/jubatus"
+  IDL_HASH=`git log -1 --format=%H -- ${IDL}`
+  IDL_VER=`git describe ${IDL_HASH}`
+  jenerator -l python "${IDL}" -o "${CLIENT_DIR}/jubatus" --idl-version ${IDL_VER}
 done
 popd
 
