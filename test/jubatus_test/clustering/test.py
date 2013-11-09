@@ -9,9 +9,10 @@ import msgpackrpc
 from jubatus.clustering.client import Clustering
 from jubatus.clustering.types import *
 from jubatus_test.test_util import TestUtil
+from jubatus.common import Datum
 
 host = "127.0.0.1"
-port = 21038
+port = 21007
 timeout = 10
 
 class ClusteringTest(unittest.TestCase):
@@ -34,11 +35,11 @@ class ClusteringTest(unittest.TestCase):
                 },
             "parameter" : {
                 "k" : 10,
-                "compressor_method" : "compressive_kmeans",
-                "backet_size" : 10000,
-                "compressed_backet_size" : 1000,
+                "compressor_method" : "simple",
+                "backet_size" : 1,
+                "compressed_backet_size" : 1,
                 "bicriteria_base_size" : 10,
-                "backet_length" : 2,
+                "backet_length" : 1,
                 "forgetting_factor" : 0,
                 "forgetting_threshold" : 0.5
                 } 
@@ -57,6 +58,45 @@ class ClusteringTest(unittest.TestCase):
 
     def test_get_client(self):
         self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
+
+    def test_push(self):
+        d = Datum()
+        self.assertTrue(self.cli.push([d]))
+ 
+    def test_get_revisionh(self):
+        res = self.cli.get_revision()
+        self.assertTrue(isinstance(res, int))
+
+    def test_get_core_members(self):
+        d = Datum({"nkey1": 1.0, "nkey2": 2.0})
+        self.cli.push([d])
+        res = self.cli.get_core_members()
+        self.assertEqual(len(res), 10)
+        self.assertEqual(len(res[0]), 1)
+        self.assertTrue(isinstance(res[0][0], WeightedDatum))
+
+    def test_get_k_center(self):
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([d])
+        res = self.cli.get_k_center()
+        self.assertEqual(len(res), 10)
+        self.assertTrue(isinstance(res[0], Datum))
+
+    def test_get_nearest_center(self):
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([d])
+        q = Datum({"nkey1": 2.0, "nkey2": 1.0})
+        res = self.cli.get_nearest_center(q)
+        self.assertTrue(isinstance(res, Datum))
+
+    def test_get_nearest_members(self):
+        d = Datum({"nkey1": 1.0, "nkey2": 1.0})
+        q = Datum({"nkey1": 2.0, "nkey2": 1.0})
+        self.cli.push([d])
+        res = self.cli.get_nearest_members(q)
+        self.assertTrue(isinstance(res[0], WeightedDatum))
 
 if __name__ == '__main__':
     test_suite = unittest.TestLoader().loadTestsFromTestCase(ClusteringTest)
