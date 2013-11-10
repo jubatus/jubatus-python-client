@@ -21,10 +21,10 @@ name_clustering = "clustering"
 class ClusterAnalysisTest(unittest.TestCase):
     def setUp(self):
         self.config = {
-            "name" : "clustering",
-            "host" : "127.0.01",
-            "port" : 21008,
-            "timeout_sec" : 10,
+            "name" : name_clustering,
+            "host" : host,
+            "port" : port_clustering,
+            "timeout_sec" : timeout,
             "num_snapshots" : 3
             }
         self.config_clustering = {
