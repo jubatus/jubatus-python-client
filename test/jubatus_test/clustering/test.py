@@ -62,7 +62,7 @@ class ClusteringTest(unittest.TestCase):
         d = Datum()
         self.assertTrue(self.cli.push([d]))
  
-    def test_get_revisionh(self):
+    def test_get_revision(self):
         res = self.cli.get_revision()
         self.assertTrue(isinstance(res, int))
 
