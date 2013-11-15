@@ -21,13 +21,16 @@ class TestUtil:
         return False
 
     @staticmethod
-    def wait_server(port):
+    def wait_server(port, proc):
         sleep_time = 1000 # usec
         # 1000 * \sum {i=0..9} 2^i = 1024000 micro sec = 1024 ms
         for i in range(10):
                 time.sleep(sleep_time/1000000.0) # from usec to sec
                 if TestUtil.check_server(port):
                     return
+                if proc.poll():
+                    stderr = proc.stderr.read()
+                    raise Exception('Cannot run server process: \n' + stderr)
                 sleep_time *= 2;
         raise Exception("cannot connect")
 
@@ -40,9 +43,10 @@ class TestUtil:
                 raise Exception('Another server is already running')
             # use PIPE to surpress log messages of server processes
             proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            TestUtil.wait_server(port)
+            TestUtil.wait_server(port, proc)
             if proc.poll():
-                raise Exception('Cannot run server process')
+                stderr = proc.stderr.read()
+                raise Exception('Cannot run server process: \n' + stderr)
             return proc
         except OSError as error:
             print 'Unable to fork. Error: %d (%s)' % (error.errno, error.strerror)
