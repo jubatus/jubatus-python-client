@@ -35,10 +35,10 @@ class ClusteringTest(unittest.TestCase):
             "parameter" : {
                 "k" : 10,
                 "compressor_method" : "simple",
-                "backet_size" : 1,
-                "compressed_backet_size" : 1,
+                "bucket_size" : 1,
+                "compressed_bucket_size" : 1,
                 "bicriteria_base_size" : 10,
-                "backet_length" : 1,
+                "bucket_length" : 1,
                 "forgetting_factor" : 0,
                 "forgetting_threshold" : 0.5
                 } 
