@@ -13,8 +13,8 @@ from jubatus_test.test_util import TestUtil
 from jubatus.common import Datum
 
 host = "127.0.0.1"
-port_clustering = 21008
-port = 21009
+port_clustering = 21010
+port = 21011
 timeout = 10
 name_clustering = "clustering"
 
