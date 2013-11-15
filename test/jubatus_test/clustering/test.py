@@ -11,7 +11,7 @@ from jubatus_test.test_util import TestUtil
 from jubatus.common import Datum
 
 host = "127.0.0.1"
-port = 21007
+port = 21008
 timeout = 10
 
 class ClusteringTest(unittest.TestCase):
