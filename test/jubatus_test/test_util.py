@@ -7,6 +7,10 @@ import subprocess
 import msgpackrpc
 from msgpackrpc.error import *
 
+import logging
+
+logging.getLogger().setLevel(logging.ERROR)
+
 class TestUtil:
     @staticmethod
     def check_server(port):
