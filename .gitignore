@@ -1,4 +1,5 @@
-jubatus/
+jubatus/*
+!jubatus/common/
 *.egg-info
 *.egg
 *.pyc
@@ -6,3 +7,5 @@ jubatus/
 *.js
 *.xml
 *.json
+*~
+build/

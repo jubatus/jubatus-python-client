@@ -15,16 +15,22 @@ popd
 # Python
 
 capitalize() {
-  echo "$(echo ${1:0:1} | tr 'a-z' 'A-Z')${1:1}"
+  python -c "print ''.join(map(str.capitalize, '${1}'.split('_')))"
 }
 
-rm -rf "${CLIENT_DIR}/jubatus"
+for DIR in "${CLIENT_DIR}/jubatus/"*; do
+  if [ "$(basename "${DIR}")" != "common" ]; then
+    rm -rf $DIR
+  fi
+done
 SERVICE_LIST=()
 pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
   NAMESPACE="$(basename "${IDL}" ".idl")"
   SERVICE_LIST[${#SERVICE_LIST[@]}]="${NAMESPACE}"
-  jenerator -l python "${IDL}" -o "${CLIENT_DIR}/jubatus"
+  IDL_HASH=`git log -1 --format=%H -- ${IDL}`
+  IDL_VER=`git describe ${IDL_HASH}`
+  jenerator -l python "${IDL}" -o "${CLIENT_DIR}/jubatus" --idl-version ${IDL_VER}
 done
 popd
 
@@ -36,7 +42,7 @@ __all__ = [$(
 )]
 
 $(for SERVICE in ${SERVICE_LIST[@]}; do
-  echo "from jubatus.${SERVICE}.client import ${SERVICE} as $(capitalize "${SERVICE}")";
+  echo "from jubatus.${SERVICE}.client import $(capitalize "${SERVICE}")";
 done)
 _EOF_
 
