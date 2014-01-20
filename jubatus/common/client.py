@@ -22,14 +22,14 @@ class Client(object):
         self.client = client
         self.name = name
 
-    def call(self, method, args, ret_type, args_type):
+    def call(self, method, args, ret_type, args_type, use_name=True):
         if len(args) != len(args_type):
             # This error does not occurr if a client code is correctly generated
             message = "\"%s\" takes %d argument, but %d given" \
                 % (method, len(args_type), len(args))
             raise TypeError(message)
 
-        values = [self.name]
+        values = [self.name] if use_name else []
         for (v, t) in zip(args, args_type):
             values.append(t.to_msgpack(v))
 
@@ -64,3 +64,11 @@ class ClientBase(object):
             [],
             TMap(TString(), TMap(TString(), TString())),
             [])
+
+    def get_proxy_status(self):
+        return self.jubatus_client.call(
+            "get_proxy_status",
+            [],
+            TMap(TString(), TMap(TString(), TString())),
+            [],
+            False)
