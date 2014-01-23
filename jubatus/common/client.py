@@ -70,4 +70,4 @@ class ClientBase(object):
             "get_proxy_status",
             [],
             TMap(TString(), TMap(TString(), TString())),
-            []),
+            [])
