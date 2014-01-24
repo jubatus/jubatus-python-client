@@ -64,3 +64,10 @@ class ClientBase(object):
             [],
             TMap(TString(), TMap(TString(), TString())),
             [])
+
+    def get_proxy_status(self):
+        return self.jubatus_client.call(
+            "get_proxy_status",
+            [],
+            TMap(TString(), TMap(TString(), TString())),
+            [])
