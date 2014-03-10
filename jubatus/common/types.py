@@ -23,10 +23,10 @@ class TPrimitive(object):
 class TInt(object):
     def __init__(self, signed, byts):
         if signed:
-            self.max = (1L << (8 * byts - 1)) - 1
-            self.min = - (1L << (8 * byts - 1))
+            self.max = (1 << (8 * byts - 1)) - 1
+            self.min = - (1 << (8 * byts - 1))
         else:
-            self.max = (1L << 8 * byts) - 1
+            self.max = (1 << 8 * byts) - 1
             self.min = 0
 
     def from_msgpack(self, m):
@@ -49,17 +49,25 @@ class TBool(TPrimitive):
     def __init__(self):
         super(TBool, self).__init__((bool,))
 
-class TString(TPrimitive):
-    def __init__(self):
-        super(TString, self).__init__((str, unicode))
+class TString(object):
+    def to_msgpack(self, m):
+        check_types(m, (str,))
+        return m
 
+    def from_msgpack(self, m):
+        check_types(m, (str, bytes))
+        if isinstance(m, str):
+            return m
+        elif isinstance(m, bytes):
+            return str(m)
+        
 class TDatum(object):
     def from_msgpack(self, m):
-        from datum import Datum
+        from .datum import Datum
         return Datum.from_msgpack(m)
 
     def to_msgpack(self, m):
-        from datum import Datum
+        from .datum import Datum
         check_type(m, Datum)
         return m.to_msgpack()
 
@@ -103,7 +111,7 @@ class TMap(object):
     def from_msgpack(self, m):
         check_type(m, dict)
         dic = {}
-        for k, v in m.iteritems():
+        for k, v in m.items():
             dic[self.key.from_msgpack(k)] = self.value.from_msgpack(v)
         return dic
 

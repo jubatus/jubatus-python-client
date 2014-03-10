@@ -1,5 +1,5 @@
 import msgpackrpc
-from types import *
+from .types import *
 
 class InterfaceMismatch(Exception):
     pass
