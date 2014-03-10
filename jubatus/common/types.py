@@ -30,13 +30,13 @@ class TInt(object):
             self.min = 0
 
     def from_msgpack(self, m):
-        check_types(m, (int, long))
+        check_types(m, (int,))
         if not (self.min <= m and m <= self.max):
             raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
 
     def to_msgpack(self, m):
-        check_types(m, (int, long))
+        check_types(m, (int,))
         if not (self.min <= m and m <= self.max):
             raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
@@ -59,7 +59,7 @@ class TString(object):
         if isinstance(m, str):
             return m
         elif isinstance(m, bytes):
-            return str(m)
+            return m.decode()
         
 class TDatum(object):
     def from_msgpack(self, m):
@@ -97,11 +97,11 @@ class TList(object):
 
     def from_msgpack(self, m):
         check_types(m, (list, tuple))
-        return map(self.type.from_msgpack, m)
+        return list(map(self.type.from_msgpack, m))
 
     def to_msgpack(self, m):
         check_types(m, (list, tuple))
-        return map(self.type.to_msgpack, m)
+        return list(map(self.type.to_msgpack, m))
 
 class TMap(object):
     def __init__(self, key, value):
@@ -173,13 +173,13 @@ class TEnum(object):
         self.values = values
 
     def from_msgpack(self, m):
-        check_types(m, (int, long))
+        check_types(m, (int,))
         if m not in self.values:
             raise ValueError
         return m
 
     def to_msgpack(self, m):
-        check_types(m, (int, long))
+        check_types(m, (int,))
         if m not in self.values:
             raise ValueError
         return m
