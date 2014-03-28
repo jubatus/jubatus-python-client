@@ -49,6 +49,12 @@ class ClientBase(object):
     def get_client(self):
         return self.client
 
+    def get_name(self):
+        return self.jubatus_client.name
+
+    def set_name(self, name):
+        self.jubatus_client.name = name
+
     def save(self, id):
         return self.jubatus_client.call("save", [id], TBool(), [TString()])
 
