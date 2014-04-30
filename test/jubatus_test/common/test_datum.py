@@ -1,6 +1,7 @@
 from jubatus.common import Datum
 import unittest
 import msgpack
+from jubatus.common.compat import b
 
 class DatumTest(unittest.TestCase):
     def test_pack(self):
@@ -9,7 +10,7 @@ class DatumTest(unittest.TestCase):
             msgpack.packb(Datum({'name': 'Taro', 'age': 20}).to_msgpack()))
 
     def test_unpack(self):
-        d = Datum.from_msgpack(([['name', 'Taro']], [['age', 20.0]], [['img', '0101']]))
+        d = Datum.from_msgpack(([['name', 'Taro']], [['age', 20.0]], [['img', b('0101')]]))
         self.assertEquals(
             [('name', 'Taro')],
             d.string_values)
@@ -17,7 +18,7 @@ class DatumTest(unittest.TestCase):
             [('age', 20.0)],
             d.num_values)
         self.assertEquals(
-            [('img', '0101')],
+            [('img', b('0101'))],
             d.binary_values)
 
     def test_empty(self):
@@ -67,9 +68,9 @@ class DatumTest(unittest.TestCase):
 
     def test_add_binary(self):
         d = Datum()
-        d.add_binary('key', 'value')
+        d.add_binary('key', b('value'))
         self.assertEquals(
-            ([], [], [['key', 'value']]),
+            ([], [], [['key', b('value')]]),
             d.to_msgpack())
 
     def test_invalid_add_binary(self):
@@ -81,7 +82,7 @@ class DatumTest(unittest.TestCase):
         d = Datum()
         d.add_string('name', 'john')
         d.add_number('age', 20)
-        d.add_binary('image', '0101')
+        d.add_binary('image', b('0101'))
         self.assertEquals('datum{string_values: [[\'name\', \'john\']], num_values: [[\'age\', 20.0]], binary_values: [[\'image\', \'0101\']]}',
                           str(d))
 
