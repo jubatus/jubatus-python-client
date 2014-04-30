@@ -1,3 +1,5 @@
+from .compat import int_types, string_types, binary_types
+
 def check_type(value, typ):
     if not isinstance(value, typ):
         raise TypeError('type %s is expected, but %s is given' % (typ, type(value)))
@@ -30,13 +32,13 @@ class TInt(object):
             self.min = 0
 
     def from_msgpack(self, m):
-        check_types(m, (int,))
+        check_types(m, int_types)
         if not (self.min <= m and m <= self.max):
             raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
 
     def to_msgpack(self, m):
-        check_types(m, (int,))
+        check_types(m, int_types)
         if not (self.min <= m and m <= self.max):
             raise ValueError('int value must be in (%d, %d), but %d is given' % (self.min, self.max, m))
         return m
@@ -51,15 +53,16 @@ class TBool(TPrimitive):
 
 class TString(object):
     def to_msgpack(self, m):
-        check_types(m, (str,))
+        check_types(m, string_types)
         return m
 
     def from_msgpack(self, m):
-        check_types(m, (str, bytes))
-        if isinstance(m, str):
-            return m
-        elif isinstance(m, bytes):
-            return m.decode()
+        check_types(m, string_types)
+        return m
+        # if isinstance(m, str):
+        #     return m
+        # elif isinstance(m, bytes):
+        #     return m.decode()
         
 class TDatum(object):
     def from_msgpack(self, m):
@@ -73,7 +76,7 @@ class TDatum(object):
 
 class TRaw(TPrimitive):
     def __init__(self):
-        super(TRaw, self).__init__((str,))
+        super(TRaw, self).__init__(binary_types)
 
 class TNullable(object):
     def __init__(self, type):
@@ -173,13 +176,13 @@ class TEnum(object):
         self.values = values
 
     def from_msgpack(self, m):
-        check_types(m, (int,))
+        check_types(m, int_types)
         if m not in self.values:
             raise ValueError
         return m
 
     def to_msgpack(self, m):
-        check_types(m, (int,))
+        check_types(m, int_types)
         if m not in self.values:
             raise ValueError
         return m

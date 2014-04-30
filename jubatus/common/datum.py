@@ -1,5 +1,6 @@
 from .message_string_generator import MessageStringGenerator
 from .types import *
+from .compat import int_types, string_types, binary_types
 
 class Datum:
     TYPE = TTuple(TList(TTuple(TString(), TString())),
@@ -12,40 +13,40 @@ class Datum:
         self.binary_values = []
 
         for (k, v) in values.items():
-            if not isinstance(k, (str,)):
+            if not isinstance(k, string_types):
                 raise TypeError
 
-            if isinstance(v, (str,)):
+            if isinstance(v, string_types):
                 self.string_values.append([k, v])
             elif isinstance(v, float):
                 self.num_values.append([k, v])
-            elif isinstance(v, int):
+            elif isinstance(v, int_types):
                 self.num_values.append([k, float(v)])
             else:
                 raise TypeError
 
     def add_string(self, key, value):
-        if not isinstance(key, (str,)):
+        if not isinstance(key, string_types):
             raise TypeError
-        if isinstance(value, (str,)):
+        if isinstance(value, string_types):
             self.string_values.append([key, value])
         else:
             raise TypeError
 
     def add_number(self, key, value):
-        if not isinstance(key, (str,)):
+        if not isinstance(key, string_types):
             raise TypeError
         if isinstance(value, float):
             self.num_values.append([key, value])
-        elif isinstance(value, int):
+        elif isinstance(value, int_types):
             self.num_values.append([key, float(value)])
         else:
             raise TypeError
 
     def add_binary(self, key, value):
-        if not isinstance(key, (str,)):
+        if not isinstance(key, string_types):
             raise TypeError
-        if isinstance(value, str):
+        if isinstance(value, binary_types):
             self.binary_values.append([key, value])
         else:
             raise TypeError

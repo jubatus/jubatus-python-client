@@ -43,7 +43,7 @@ class Client(object):
 class ClientBase(object):
     def __init__(self, host, port, name, timeout=10):
         address = msgpackrpc.Address(host, port)
-        self.client = msgpackrpc.Client(address, timeout=timeout)
+        self.client = msgpackrpc.Client(address, timeout=timeout, unpack_encoding='utf-8')
         self.jubatus_client = Client(self.client, name)
 
     def get_client(self):

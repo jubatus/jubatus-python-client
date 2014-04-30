@@ -83,8 +83,8 @@ class DatumTest(unittest.TestCase):
         d.add_string('name', 'john')
         d.add_number('age', 20)
         d.add_binary('image', b('0101'))
-        self.assertEquals('datum{string_values: [[\'name\', \'john\']], num_values: [[\'age\', 20.0]], binary_values: [[\'image\', \'0101\']]}',
-                          str(d))
+        s = str(d)
+        self.assertTrue('datum{string_values: [[\'name\', \'john\']], num_values: [[\'age\', 20.0]], binary_values: [[\'image\', \'0101\']]}' == s or 'datum{string_values: [[\'name\', \'john\']], num_values: [[\'age\', 20.0]], binary_values: [[\'image\', b\'0101\']]}' == s)
 
 if __name__ == '__main__':
     unittest.main()
