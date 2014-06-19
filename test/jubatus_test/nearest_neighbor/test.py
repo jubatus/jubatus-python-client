@@ -57,14 +57,14 @@ class NearestNeighborTest(unittest.TestCase):
         d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
         self.cli.set_row("neighbor_row", d)
         d1 = self.cli.neighbor_row_from_id("neighbor_row", 10)
-        d2 = self.cli.neighbor_row_from_data(d, 10)
+        d2 = self.cli.neighbor_row_from_datum(d, 10)
 
     def test_similar_row(self):
         self.cli.clear()
         d = Datum({"skey1": "val1", "skey2": "val2", "nkey1": 1.0, "nkey2": 2.0})
         self.cli.set_row("similar_row", d)
         s1 = self.cli.similar_row_from_id("similar_row", 10)
-        s2 = self.cli.similar_row_from_data(d, 10)
+        s2 = self.cli.similar_row_from_datum(d, 10)
 
     def test_clear(self):
         self.cli.clear()
