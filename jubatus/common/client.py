@@ -49,11 +49,20 @@ class ClientBase(object):
     def get_client(self):
         return self.client
 
+    def get_name(self):
+        return self.jubatus_client.name
+
+    def set_name(self, name):
+        self.jubatus_client.name = name
+
     def save(self, id):
         return self.jubatus_client.call("save", [id], TBool(), [TString()])
 
     def load(self, id):
       return self.jubatus_client.call("load", [id], TBool(), [TString()])
+
+    def do_mix(self):
+        return self.jubatus_client.call("do_mix", [], TBool(), [])
 
     def get_config(self):
         return self.jubatus_client.call("get_config", [], TString(), [])
@@ -61,6 +70,13 @@ class ClientBase(object):
     def get_status(self):
         return self.jubatus_client.call(
             "get_status",
+            [],
+            TMap(TString(), TMap(TString(), TString())),
+            [])
+
+    def get_proxy_status(self):
+        return self.jubatus_client.call(
+            "get_proxy_status",
             [],
             TMap(TString(), TMap(TString(), TString())),
             [])
