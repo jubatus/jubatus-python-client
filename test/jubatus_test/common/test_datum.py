@@ -1,7 +1,7 @@
 from jubatus.common import Datum
 import unittest
 import msgpack
-from jubatus.common.compat import b
+from jubatus.common.compat import b, u
 
 class DatumTest(unittest.TestCase):
     def test_pack(self):
@@ -40,7 +40,7 @@ class DatumTest(unittest.TestCase):
                          d.to_msgpack())
 
         d = Datum()
-        d.add_string(u'key', u'value')
+        d.add_string(u('key'), u('value'))
         self.assertEqual(Datum({'key': 'value'}).to_msgpack(),
                          d.to_msgpack())
 
