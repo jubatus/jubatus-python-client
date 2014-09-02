@@ -34,7 +34,7 @@ class TestUtil:
                     return
                 if proc.poll():
                     stderr = proc.stderr.read()
-                    raise Exception('Cannot run server process: \n' + stderr)
+                    raise Exception('Cannot run server process: \n{0}'.format(stderr))
                 sleep_time *= 2;
         raise Exception("cannot connect")
 
