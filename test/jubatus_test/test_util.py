@@ -49,9 +49,9 @@ class TestUtil:
             proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             try:
                 TestUtil.wait_server(port, proc)
-            except e:
+            except:
                 proc.kill()
-                raise e
+                raise
             if proc.poll():
                 stderr = proc.stderr.read()
                 raise Exception('Cannot run server process: \n' + stderr)
