@@ -21,7 +21,9 @@ class TestUtil:
             raise Exception("dummy rpc succeeded")
         except RPCError, e:
             if e.args[0] == 1: # "no such method"
+                cli.close()
                 return True                 # ... means server is fully up
+        cli.close()
         return False
 
     @staticmethod
