@@ -63,7 +63,7 @@ class TestUtil:
     @staticmethod
     def kill_process(process):
         process.terminate()
-        process.wait()
+        process.communicate()
 
     @staticmethod
     def write_file(path, data):
