@@ -45,8 +45,8 @@ class TestUtil:
         try:
             if TestUtil.check_server(port):
                 raise Exception('Another server is already running')
-            # use PIPE to surpress log messages of server processes
             proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+            # use PIPE to suppress log messages of server processes
             try:
                 TestUtil.wait_server(port, proc)
             except Exception:
