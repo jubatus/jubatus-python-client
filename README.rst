@@ -32,6 +32,6 @@ To make Python packages, run `generate.sh` and package it::
 Before making Python packages, you need to build Python files from .idl.
 Run the `generate.sh` to generate your own Python client, you need to build `jenerator`, a client code generator.
 
-See the document for the details: http://jubat.us/ja/server.html#id5
+See the document for the details: `English <http://jubat.us/en/server.html#building-jenerator>`_ / `Japanese <http://jubat.us/ja/server.html#id5>`_
 jenerator source is can be found in the main Jubatus repository: https://github.com/jubatus/jubatus/tree/master/tools/jenerator/
 Make sure to put `jenerator` in your `PATH` environment variable.
