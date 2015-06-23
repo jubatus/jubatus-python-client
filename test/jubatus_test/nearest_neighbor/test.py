@@ -70,7 +70,7 @@ class NearestNeighborTest(unittest.TestCase):
         self.cli.clear()
 
     def test_save(self):
-        self.assertEqual(self.cli.save("nearest_neighbor.save_test.model"), True)
+        self.assertEqual(len(self.cli.save("nearest_neighbor.save_test.model")), True)
 
     def test_load(self):
         model_name = "nearest_neighbor.load_test.model"

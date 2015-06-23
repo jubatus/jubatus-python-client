@@ -62,7 +62,7 @@ class RegressionTest(unittest.TestCase):
         result = self.cli.estimate(data)
 
     def test_save(self):
-        self.assertEqual(self.cli.save("regression.save_test.model"), True)
+        self.assertEqual(len(self.cli.save("regression.save_test.model")), 1)
 
     def test_load(self):
         model_name = "regression.load_test.model"

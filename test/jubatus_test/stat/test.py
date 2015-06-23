@@ -87,7 +87,7 @@ class StatTest(unittest.TestCase):
         self.assertEqual(self.cli.moment("moment", 1, 1.0), 2.0)
 
     def test_save(self):
-        self.assertEqual(self.cli.save("stat.save_test.model"), True)
+        self.assertEqual(len(self.cli.save("stat.save_test.model")), 1)
 
     def test_load(self):
         model_name = "stat.load_test.model"

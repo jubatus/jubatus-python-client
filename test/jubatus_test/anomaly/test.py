@@ -92,7 +92,7 @@ class AnomalyTest(unittest.TestCase):
         self.assertEqual(json.dumps(json.loads(config), sort_keys=True), json.dumps(self.config, sort_keys=True))
 
     def test_save(self):
-        self.assertEqual(self.cli.save("anomaly.save_test.model"), True)
+        self.assertEqual(len(self.cli.save("anomaly.save_test.model")), 1)
 
     def test_load(self):
         model_name = "anomaly.load_test.model"
