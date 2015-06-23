@@ -91,7 +91,7 @@ class RecommenderTest(unittest.TestCase):
         self.cli.clear()
 
     def test_save(self):
-        self.assertEqual(self.cli.save("recommender.save_test.model"), True)
+        self.assertEqual(len(self.cli.save("recommender.save_test.model")), 1)
 
     def test_load(self):
         model_name = "recommender.load_test.model"

@@ -61,7 +61,7 @@ class ClassifierTest(unittest.TestCase):
         result = self.cli.classify(data)
 
     def test_save(self):
-        self.assertEqual(self.cli.save("classifier.save_test.model"), True)
+        self.assertEqual(len(self.cli.save("classifier.save_test.model")), 1)
 
     def test_load(self):
         model_name = "classifier.load_test.model"
