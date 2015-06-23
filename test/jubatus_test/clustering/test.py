@@ -91,9 +91,10 @@ class ClusteringTest(unittest.TestCase):
         self.assertTrue(isinstance(res, Datum))
 
     def test_get_nearest_members(self):
-        d = Datum({"nkey1": 1.0, "nkey2": 1.0})
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([d])
         q = Datum({"nkey1": 2.0, "nkey2": 1.0})
-        self.cli.push([d])
         res = self.cli.get_nearest_members(q)
         self.assertTrue(isinstance(res[0], WeightedDatum))
 
