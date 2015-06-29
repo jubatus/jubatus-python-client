@@ -56,7 +56,7 @@ class ClientBase(object):
         self.jubatus_client.name = name
 
     def save(self, id):
-        return self.jubatus_client.call("save", [id], TBool(), [TString()])
+        return self.jubatus_client.call("save", [id], TMap(TString(), TString()), [TString()])
 
     def load(self, id):
       return self.jubatus_client.call("load", [id], TBool(), [TString()])
