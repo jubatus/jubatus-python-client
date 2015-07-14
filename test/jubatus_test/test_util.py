@@ -19,7 +19,7 @@ class TestUtil:
         try:
             cli.call("dummy")
             raise Exception("dummy rpc succeeded")
-        except RPCError, e:
+        except RPCError as e:
             if e.args[0] == 1: # "no such method"
                 cli.close()
                 return True                 # ... means server is fully up
@@ -36,7 +36,7 @@ class TestUtil:
                     return
                 if proc.poll():
                     stderr = proc.stderr.read()
-                    raise Exception('Cannot run server process: \n' + stderr)
+                    raise Exception('Cannot run server process: \n{0}'.format(stderr))
                 sleep_time *= 2;
         raise Exception("cannot connect")
 
@@ -59,7 +59,7 @@ class TestUtil:
                 raise Exception('Cannot run server process: \n' + stderr)
             return proc
         except OSError as error:
-            print 'Unable to fork. Error: %d (%s)' % (error.errno, error.strerror)
+            print('Unable to fork. Error: {0} ({1})'.format(error.errno, error.strerror))
             raise error
 
     @staticmethod

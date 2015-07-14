@@ -43,5 +43,5 @@ setup(name='jubatus',
           'Topic :: Scientific/Engineering :: Information Analysis'
       ],
 
-      test_suite='jubatus_test',
+      test_suite='jubatus_test.suite',
 )
