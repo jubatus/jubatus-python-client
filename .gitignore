@@ -5,7 +5,9 @@ jubatus/*
 *.pyc
 .coverage
 *.js
+*.jubatus
 *.xml
 *.json
 *~
 build/
+dist/
