@@ -1,0 +1,45 @@
+language: python
+
+python:
+  - "2.6"
+  - "2.7"
+  #- "3.2"
+  #- "3.3"
+
+before_install:
+  - env
+  - lsb_release -a
+  - uname -a
+  - sudo apt-get -qq update
+
+install:
+  - echo "yes" | sudo add-apt-repository ppa:avsm/ocaml41+opam11
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install opam ocaml ocaml-native-compilers camlp4-extra
+  - export OPAMYES=1
+  - opam init
+  - opam install -y omake ounit extlib
+  - eval `opam config env`
+  - which omake
+
+  - git clone https://github.com/jubatus/jubatus.git jubatus_server
+  # jenerator
+  - mkdir -p ~/bin
+  - pushd jubatus_server/tools/jenerator && omake && PREFIX=~/ omake install && popd
+
+  - sudo sh -c "echo 'deb http://download.jubat.us/apt binary/' > /etc/apt/sources.list.d/jubatus.list"
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install jubatus --force-yes
+
+  # for jubatus-python-client
+  - pip install msgpack-rpc-python
+
+#branches:
+#  only:
+#    - master
+#    - develop
+
+script:
+  - PATH=~/bin:${PATH} ./generate.sh
+  - source /opt/jubatus/profile
+  - python setup.py test

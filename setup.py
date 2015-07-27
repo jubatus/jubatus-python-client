@@ -1,4 +1,9 @@
 try:
+    import concurrent
+except ImportError:
+    pass
+
+try:
     from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
@@ -43,5 +48,5 @@ setup(name='jubatus',
           'Topic :: Scientific/Engineering :: Information Analysis'
       ],
 
-      test_suite='jubatus_test',
+      test_suite='jubatus_test.suite',
 )

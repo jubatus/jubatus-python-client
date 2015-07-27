@@ -29,6 +29,8 @@ class StatTest(unittest.TestCase):
             raise
 
     def tearDown(self):
+        if self.cli:
+            self.cli.get_client().close()
         TestUtil.kill_process(self.srv)
 
     def test_get_client(self):

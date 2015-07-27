@@ -1,10 +1,11 @@
 from jubatus.common import *
+from jubatus.common.compat import u, b
 import unittest
 
 class TypeCheckTest(unittest.TestCase):
     def assertTypeOf(self, type, value):
-        self.assertEquals(value, type.from_msgpack(value))
-        self.assertEquals(value, type.to_msgpack(value))
+        self.assertEqual(value, type.from_msgpack(value))
+        self.assertEqual(value, type.to_msgpack(value))
 
     def assertTypeError(self, type, value):
         self.assertRaises(TypeError, lambda: type.from_msgpack(value))
@@ -19,14 +20,20 @@ class TypeCheckTest(unittest.TestCase):
         self.assertTypeError(TInt(True, 1), None)
         self.assertTypeError(TInt(True, 1), "")
         self.assertValueError(TInt(True, 1), 128)
+        self.assertValueError(TInt(True, 1), 1 << 40)
         self.assertValueError(TInt(True, 1), -129)
         self.assertValueError(TInt(False, 1), 256)
         self.assertValueError(TInt(False, 1), -1)
+
+    def testLong(self):
+        self.assertTypeOf(TInt(True, 8), 1)
+        self.assertTypeOf(TInt(True, 8), 1 << 40)
 
     def testFloat(self):
         self.assertTypeOf(TFloat(), 1.3)
         self.assertTypeError(TFloat(), None)
         self.assertTypeError(TFloat(), 1)
+        self.assertTypeError(TFloat(), 1 << 40)
 
     def testBool(self):
         self.assertTypeOf(TBool(), True)
@@ -34,13 +41,13 @@ class TypeCheckTest(unittest.TestCase):
         self.assertTypeError(TBool(), 1)
 
     def testString(self):
+        #self.assertTypeOf(TString(), b("test"))
         self.assertTypeOf(TString(), "test")
-        self.assertTypeOf(TString(), u"test")
         self.assertTypeError(TString(), 1)
 
     def testRaw(self):
-        self.assertTypeOf(TRaw(), "test")
-        self.assertTypeError(TRaw(), u"test")
+        self.assertTypeOf(TRaw(), b("test"))
+        self.assertTypeError(TRaw(), u("test"))
         self.assertTypeError(TRaw(), 1)
 
     def testNullable(self):
@@ -61,10 +68,10 @@ class TypeCheckTest(unittest.TestCase):
 
     def testTuple(self):
         typ = TTuple(TInt(True, 8), TTuple(TString(), TInt(True, 8)))
-        self.assertEquals(
+        self.assertEqual(
             [1, ["test", 1]],
             typ.to_msgpack((1, ("test", 1))))
-        self.assertEquals(
+        self.assertEqual(
             (1, ("test", 1)),
             typ.from_msgpack((1, ("test", 1))))
         self.assertTypeError(TTuple(TInt(True, 8)), ("test", ))
@@ -90,7 +97,7 @@ class TypeCheckTest(unittest.TestCase):
         typ = TUserDef(MyType)
         obj = typ.from_msgpack(("hoge", 1.0))
         self.assertTrue(isinstance(obj, MyType))
-        self.assertEquals(["hoge", 1.0], typ.to_msgpack(obj))
+        self.assertEqual(["hoge", 1.0], typ.to_msgpack(obj))
 
         self.assertTypeError(typ, 1)
         self.assertTypeError(typ, [])
