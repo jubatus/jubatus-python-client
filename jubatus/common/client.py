@@ -41,9 +41,21 @@ class Client(object):
             return ret_type.from_msgpack(ret)
 
 class ClientBase(object):
+    """
+    Notes regarding MessagePack coding:
+    - Data sent via RPC may contain both Unicode string (unicode in Py2, str in Py3)
+      and Bytes (str in Py2, bytes in Py3.)
+    - MessagePack spec does not distinguish these two (both are RAW.)
+    - When packing, we let MessagePack library to encode all Unicode as RAW bytes
+      in UTF-8 representation. (`pack_encoding='utf-8'`)
+    - When unpacking, we cannot let MessagePack library to decode RAW bytes,
+      as MessagePack library cannot tell whether it is a Unicode or a Bytes.
+      We manually decode RAW data into Unicode or Bytes in type conversion.
+      (`unpack_encoding=None`)
+    """
     def __init__(self, host, port, name, timeout=10):
         address = msgpackrpc.Address(host, port)
-        self.client = msgpackrpc.Client(address, timeout=timeout, unpack_encoding='utf-8')
+        self.client = msgpackrpc.Client(address, timeout=timeout, pack_encoding='utf-8', unpack_encoding=None)
         self.jubatus_client = Client(self.client, name)
 
     def get_client(self):

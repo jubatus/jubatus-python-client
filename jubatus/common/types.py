@@ -57,13 +57,11 @@ class TString(object):
         return m
 
     def from_msgpack(self, m):
+        if isinstance(m, binary_types):
+            m = m.decode('utf-8')
         check_types(m, string_types)
         return m
-        # if isinstance(m, str):
-        #     return m
-        # elif isinstance(m, bytes):
-        #     return m.decode()
-        
+
 class TDatum(object):
     def from_msgpack(self, m):
         from .datum import Datum
