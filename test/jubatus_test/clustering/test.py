@@ -40,7 +40,8 @@ class ClusteringTest(unittest.TestCase):
                 "bicriteria_base_size" : 1,
                 "bucket_length" : 2,
                 "forgetting_factor" : 0,
-                "forgetting_threshold" : 0.5
+                "forgetting_threshold" : 0.5,
+                "seed": 0,
                 } 
             }
 
