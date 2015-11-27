@@ -70,11 +70,11 @@ class ClusteringTest(unittest.TestCase):
         self.assertTrue(isinstance(res, int))
 
     def test_get_core_members(self):
-        d = Datum({"nkey1": 1.0, "nkey2": 2.0})
-        self.cli.push([d])
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([d])
         res = self.cli.get_core_members()
         self.assertEqual(len(res), 10)
-        self.assertEqual(len(res[0]), 1)
         self.assertTrue(isinstance(res[0][0], WeightedDatum))
 
     def test_get_k_center(self):
