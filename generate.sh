@@ -15,7 +15,7 @@ popd
 # Python
 
 capitalize() {
-  python -c "print ''.join(map(str.capitalize, '${1}'.split('_')))"
+  python -c "print(''.join(map(str.capitalize, '${1}'.split('_'))))"
 }
 
 for DIR in "${CLIENT_DIR}/jubatus/"*; do
