@@ -62,6 +62,17 @@ class ClassifierTest(unittest.TestCase):
         data = [d]
         result = self.cli.classify(data)
 
+    def test_set_label(self):
+        self.assertEqual(self.cli.set_label("label"), True)
+
+    def test_get_labels(self):
+        self.cli.set_label("label")
+        self.assertEqual(self.cli.get_labels(), {"label": 0})
+
+    def test_delete_label(self):
+        self.cli.set_label("label")
+        self.assertEqual(self.cli.delete_label("label"), True)
+
     def test_save(self):
         self.assertEqual(len(self.cli.save("classifier.save_test.model")), 1)
 
