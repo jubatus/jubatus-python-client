@@ -67,5 +67,22 @@ class ClientTest(unittest.TestCase):
         self.assertEqual("test", c.call("test", [], AnyType(), []))
         self.assertRaises(TypeError, c.call, "test", [1], AnyType(), [])
 
+class ClientBaseTest(unittest.TestCase):
+    def test_constructor(self):
+        self.assertIsInstance(jubatus.common.ClientBase("127.0.0.1", 9199, "cluster", 10), jubatus.common.ClientBase)
+
+        # invalid host
+        self.assertRaises(TypeError, jubatus.common.ClientBase, 127001, 9199, "cluster", 10)
+
+        # invalid port
+        self.assertRaises(TypeError, jubatus.common.ClientBase, "127.0.0.1", "9199", "cluster", 10)
+
+        # invalid name
+        self.assertRaises(TypeError, jubatus.common.ClientBase, "127.0.0.1", 9199, 10, 10)
+
+        # invalid timeout
+        self.assertRaises(TypeError, jubatus.common.ClientBase, "127.0.0.1", 9199, "cluster", "test")
+        self.assertRaises(TypeError, jubatus.common.ClientBase, "127.0.0.1", 9199, "cluster", 1.5)
+
 if __name__ == '__main__':
     unittest.main()
