@@ -69,7 +69,7 @@ class ClientTest(unittest.TestCase):
 
 class ClientBaseTest(unittest.TestCase):
     def test_constructor(self):
-        self.assertIsInstance(jubatus.common.ClientBase("127.0.0.1", 9199, "cluster", 10), jubatus.common.ClientBase)
+        self.assertTrue(isinstance(jubatus.common.ClientBase("127.0.0.1", 9199, "cluster", 10), jubatus.common.ClientBase))
 
         # invalid host
         self.assertRaises(TypeError, jubatus.common.ClientBase, 127001, 9199, "cluster", 10)
