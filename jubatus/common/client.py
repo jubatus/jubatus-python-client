@@ -54,6 +54,10 @@ class ClientBase(object):
       (`unpack_encoding=None`)
     """
     def __init__(self, host, port, name, timeout=10):
+        check_types(host, string_types)
+        check_types(port, int_types)
+        check_types(name, string_types)
+        check_types(timeout, int_types)
         address = msgpackrpc.Address(host, port)
         self.client = msgpackrpc.Client(address, timeout=timeout, pack_encoding='utf-8', unpack_encoding=None)
         self.jubatus_client = Client(self.client, name)
@@ -65,6 +69,7 @@ class ClientBase(object):
         return self.jubatus_client.name
 
     def set_name(self, name):
+        check_types(name, string_types)
         self.jubatus_client.name = name
 
     def save(self, id):
