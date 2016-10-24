@@ -1,5 +1,6 @@
 jubatus/*
 !jubatus/common/
+!jubatus/embedded.py
 *.egg-info
 *.egg
 *.pyc
