@@ -107,6 +107,14 @@ class ClusteringTest(unittest.TestCase):
         res = self.cli.get_nearest_members(q)
         self.assertTrue(isinstance(res[0], WeightedDatum))
 
+    def test_get_nearest_members_light(self):
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([IndexedPoint(str(i), d)])
+        q = Datum({"nkey1": 2.0, "nkey2": 1.0})
+        res = self.cli.get_nearest_members_light(q)
+        self.assertTrue(isinstance(res[0], WeightedIndex))
+
 if __name__ == '__main__':
     test_suite = unittest.TestLoader().loadTestsFromTestCase(ClusteringTest)
     unittest.TextTestRunner().run(test_suite)
