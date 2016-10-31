@@ -19,7 +19,8 @@ capitalize() {
 }
 
 for DIR in "${CLIENT_DIR}/jubatus/"*; do
-  if [ "$(basename "${DIR}")" != "common" ]; then
+  NAME="$(basename "${DIR}")"
+  if [ "${NAME}" != "common" -a "${NAME}" != "embedded.py" ]; then
     rm -rf $DIR
   fi
 done

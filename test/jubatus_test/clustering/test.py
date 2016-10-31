@@ -34,16 +34,13 @@ class ClusteringTest(unittest.TestCase):
                 },
             "parameter" : {
                 "k" : 10,
-                "compressor_method" : "simple",
+                "seed": 0
+            },
+            "compressor_method" : "simple",
+            "compressor_parameter" : {
                 "bucket_size" : 3,
-                "compressed_bucket_size" : 2,
-                "bicriteria_base_size" : 1,
-                "bucket_length" : 2,
-                "forgetting_factor" : 0,
-                "forgetting_threshold" : 0.5,
-                "seed": 0,
-                } 
             }
+        }
 
         TestUtil.write_file('config_clustering.json', json.dumps(self.config))
         self.srv = TestUtil.fork_process('clustering', port, 'config_clustering.json')
@@ -62,8 +59,9 @@ class ClusteringTest(unittest.TestCase):
         self.assertTrue(isinstance(self.cli.get_client(), msgpackrpc.client.Client))
 
     def test_push(self):
+        i = "test"
         d = Datum()
-        self.assertTrue(self.cli.push([d]))
+        self.assertTrue(self.cli.push([IndexedPoint(i, d)]))
  
     def test_get_revision(self):
         res = self.cli.get_revision()
@@ -72,15 +70,23 @@ class ClusteringTest(unittest.TestCase):
     def test_get_core_members(self):
         for i in range(0, 100):
             d = Datum({"nkey1": i, "nkey2": -i})
-            self.cli.push([d])
+            self.cli.push([IndexedPoint(str(i), d)])
         res = self.cli.get_core_members()
         self.assertEqual(len(res), 10)
         self.assertTrue(isinstance(res[0][0], WeightedDatum))
 
+    def test_get_core_members_light(self):
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([IndexedPoint(str(i), d)])
+        res = self.cli.get_core_members_light()
+        self.assertEqual(len(res), 10)
+        self.assertTrue(isinstance(res[0][0], WeightedIndex))
+
     def test_get_k_center(self):
         for i in range(0, 100):
             d = Datum({"nkey1": i, "nkey2": -i})
-            self.cli.push([d])
+            self.cli.push([IndexedPoint(str(i), d)])
         res = self.cli.get_k_center()
         self.assertEqual(len(res), 10)
         self.assertTrue(isinstance(res[0], Datum))
@@ -88,7 +94,7 @@ class ClusteringTest(unittest.TestCase):
     def test_get_nearest_center(self):
         for i in range(0, 100):
             d = Datum({"nkey1": i, "nkey2": -i})
-            self.cli.push([d])
+            self.cli.push([IndexedPoint(str(i), d)])
         q = Datum({"nkey1": 2.0, "nkey2": 1.0})
         res = self.cli.get_nearest_center(q)
         self.assertTrue(isinstance(res, Datum))
@@ -96,10 +102,18 @@ class ClusteringTest(unittest.TestCase):
     def test_get_nearest_members(self):
         for i in range(0, 100):
             d = Datum({"nkey1": i, "nkey2": -i})
-            self.cli.push([d])
+            self.cli.push([IndexedPoint(str(i), d)])
         q = Datum({"nkey1": 2.0, "nkey2": 1.0})
         res = self.cli.get_nearest_members(q)
         self.assertTrue(isinstance(res[0], WeightedDatum))
+
+    def test_get_nearest_members_light(self):
+        for i in range(0, 100):
+            d = Datum({"nkey1": i, "nkey2": -i})
+            self.cli.push([IndexedPoint(str(i), d)])
+        q = Datum({"nkey1": 2.0, "nkey2": 1.0})
+        res = self.cli.get_nearest_members_light(q)
+        self.assertTrue(isinstance(res[0], WeightedIndex))
 
 if __name__ == '__main__':
     test_suite = unittest.TestLoader().loadTestsFromTestCase(ClusteringTest)

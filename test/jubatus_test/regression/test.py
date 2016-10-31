@@ -16,7 +16,7 @@ timeout = 10
 class RegressionTest(unittest.TestCase):
     def setUp(self):
         self.config = {
-            "method": "PA",
+            "method": "PA1",
             "converter": {
                 "string_filter_types": {},
                 "string_filter_rules": [],
