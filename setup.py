@@ -20,6 +20,19 @@ sys.path.append('test')
 def read(name):
     return open(os.path.join(os.path.dirname(__file__), name)).read()
 
+def get_install_requires():
+    if sys.version_info < (2, 7):
+        install_requires = [
+            'tornado<=4.4.3',
+            'msgpack-rpc-python>=0.3.0',
+        ]
+    else:
+        install_requires = [
+            'msgpack-rpc-python>=0.3.0',
+        ]
+    return install_requires
+        
+
 setup(name='jubatus',
       version=read('VERSION').rstrip(),
       description='Jubatus is a distributed processing framework and streaming machine learning library. This is the Jubatus client in Python.',
@@ -31,9 +44,7 @@ setup(name='jubatus',
       license='MIT License',
       platforms='Linux',
       packages=find_packages(exclude=['test']),
-      install_requires=[
-          'msgpack-rpc-python>=0.3.0'
-      ],
+      install_requires=get_install_requires(),
 
       entry_points="",
       ext_modules=[],
