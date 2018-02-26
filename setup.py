@@ -24,10 +24,12 @@ def get_install_requires():
     if sys.version_info < (2, 7):
         install_requires = [
             'tornado<=4.4.3',
+            'msgpack-python<0.5',
             'msgpack-rpc-python>=0.3.0',
         ]
     else:
         install_requires = [
+            'msgpack-python<0.5',
             'msgpack-rpc-python>=0.3.0',
         ]
     return install_requires
